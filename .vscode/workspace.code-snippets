@@ -1,0 +1,27 @@
+{
+  "purpose":
+  {
+    "prefix": "purpose",
+    "scope": "javascript",
+    "body": [
+      "// PURPOSE:",
+      "// ?",
+      "//",
+      "// ...",
+      "//"
+    ]
+  },
+  "test":
+  {
+    "prefix": "test",
+    "scope": "javascript",
+    "body": [
+      "it.todo('should ${1}',",
+      "  () =>",
+      "  {",
+      "    // ...",
+      "  }",
+      ");"
+    ]
+  }
+}
