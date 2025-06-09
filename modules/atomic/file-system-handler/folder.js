@@ -5,7 +5,7 @@ import { makeFileObject } from './file'
  * The object provides methods to interact with the folder and its contents.
  * 
  * @param {string} folderPath
- * @param {import('.').NodeFileSystem} fileSystem
+ * @param {IFileSystem} fileSystem
  */
 export const makeFolderObject = (folderPath, fileSystem) =>
 {

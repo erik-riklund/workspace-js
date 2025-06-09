@@ -3,7 +3,7 @@
  * The object provides methods to interact with the file.
  * 
  * @param {string} filePath
- * @param {import('.').NodeFileSystem} fileSystem
+ * @param {IFileSystem} fileSystem
  */
 export const makeFileObject = (filePath, fileSystem) =>
 {
@@ -117,7 +117,7 @@ export const makeFileObject = (filePath, fileSystem) =>
      * Writes the provided data (a JSON value) to the file.
      * The file is written using the specified encoding (default: `utf8`).
      * 
-     * @param {import('types').JsonValue} data
+     * @param {JsonValue} data
      * @param {BufferEncoding} encoding
      */
     writeJson (data, encoding = 'utf8')

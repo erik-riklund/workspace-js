@@ -7,6 +7,12 @@
 
     "paths":
     {
+      "module/*": [
+        "./modules/atomic/*/index.js",
+        "./modules/atomic/*",
+        "./modules/composite/*/index.js",
+        "./modules/composite/*"
+      ],
       "types": [ "./types.js" ]
     }
   },

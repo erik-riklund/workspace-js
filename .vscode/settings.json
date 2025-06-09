@@ -13,5 +13,11 @@
   "javascript.format.enable": true,
   "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
   "javascript.format.placeOpenBraceOnNewLineForControlBlocks": true,
-  "javascript.format.placeOpenBraceOnNewLineForFunctions": true
+  "javascript.format.placeOpenBraceOnNewLineForFunctions": true,
+
+  // Options controlling the formatting of TypeScript files.
+  "typescript.format.enable": true,
+  "typescript.format.insertSpaceAfterOpeningAndBeforeClosingEmptyBraces": false,
+  "typescript.format.placeOpenBraceOnNewLineForControlBlocks": true,
+  "typescript.format.placeOpenBraceOnNewLineForFunctions": true
 }

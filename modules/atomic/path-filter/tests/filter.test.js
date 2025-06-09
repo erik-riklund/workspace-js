@@ -1,5 +1,5 @@
 import { it, expect } from 'bun:test'
-import { makePathFilter } from '.'
+import { makePathFilter } from '..'
 
 it('should match a single file when given an exact path',
   () =>
