@@ -23,12 +23,12 @@ export const makeHttpServerAdapter = () =>
 
           routes:
           {
-            [config.assets.route]:
+            [`${config.assets.route}/*`]:
             {
               GET: (request) =>
               {
                 const url = new URL(request.url);
-                const path = url.pathname.substring(config.assets.route.length - 1);
+                const path = url.pathname.substring(config.assets.route.length + 1);
 
                 return makeFileResponse(`${config.assets.folder}/${path}`);
               },
