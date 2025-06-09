@@ -58,6 +58,16 @@ it('it should read the contents of a folder',
   }
 );
 
+it('should read the contents of a folder recursively',
+  () =>
+  {
+    const fileSystem = makeFileSystemHandler(fs);
+    const contents = fileSystem.folder('/sub').read({ recursive: true });
+
+    expect(contents).toEqual(['test.json', 'child/test.txt', 'child/test2.json']);
+  }
+);
+
 it('should create a new file object for the specified path',
   () =>
   {

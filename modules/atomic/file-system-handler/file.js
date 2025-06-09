@@ -1,5 +1,6 @@
 /**
- * ?
+ * Creates a new file object for the specified file path.
+ * The object provides methods to interact with the file.
  * 
  * @param {string} filePath
  * @param {import('.').NodeFileSystem} fileSystem
@@ -8,7 +9,7 @@ export const makeFileObject = (filePath, fileSystem) =>
 {
   return {
     /**
-     * ?
+     * Returns the path to the file as it was specified.
      */
     get path ()
     {
@@ -16,7 +17,7 @@ export const makeFileObject = (filePath, fileSystem) =>
     },
 
     /**
-     * ?
+     * Returns the name of the file (including the extension).
      */
     get name ()
     {
@@ -24,7 +25,7 @@ export const makeFileObject = (filePath, fileSystem) =>
     },
 
     /**
-     * ?
+     * Returns the path to the folder that contains the file.
      */
     get folder ()
     {
@@ -32,20 +33,16 @@ export const makeFileObject = (filePath, fileSystem) =>
     },
 
     /**
-     * ?
+     * Returns `true` if the file exists, `false` otherwise.
      */
     get exists ()
     {
-      if (!fileSystem.existsSync(filePath))
-      {
-        return false; // file does not exist.
-      }
-
-      return fileSystem.statSync(filePath).isFile();
+      return fileSystem.existsSync(filePath) && fileSystem.statSync(filePath).isFile();
     },
 
     /**
-     * ?
+     * Returns the last modified timestamp of the file in milliseconds.
+     * - Returns `-1` if the file does not exist, or is not a file.
      */
     get lastModified ()
     {
@@ -59,29 +56,45 @@ export const makeFileObject = (filePath, fileSystem) =>
     },
 
     /**
-     * ?
+     * Deletes the file if it exists.
      */
     delete ()
     {
+      if (!this.exists)
+      {
+        // We throw an error instead of letting this pass silently
+        // to avoid bugs that are hard to trace.
+
+        throw new Error(`File "${filePath}" does not exist.`);
+      }
+
       fileSystem.rmSync(filePath);
     },
 
     /**
-     * ?
+     * Returns the contents of the file as a string.
+     * The file is read using the specified encoding (default: `utf8`).
+     * 
+     * @param {BufferEncoding} encoding
      */
     read (encoding = 'utf8')
     {
       if (!this.exists)
       {
+        // We throw an error instead of returning an empty string
+        // to avoid bugs that are hard to trace.
+
         throw new Error(`File "${filePath}" does not exist.`);
       }
 
-      // @ts-expect-error: encoding as a string is valid.
       return fileSystem.readFileSync(filePath, encoding);
     },
 
     /**
-     * ?
+     * Returns the contents of the file as a JSON object.
+     * The file is read using the specified encoding (default: `utf8`).
+     * 
+     * @param {BufferEncoding} encoding
      */
     readJson (encoding = 'utf8')
     {
@@ -89,16 +102,23 @@ export const makeFileObject = (filePath, fileSystem) =>
     },
 
     /**
-     * ?
+     * Writes the provided data (a string) to the file.
+     * The file is written using the specified encoding (default: `utf8`).
+     * 
+     * @param {string} data
+     * @param {BufferEncoding} encoding
      */
     write (data, encoding = 'utf8')
     {
-      // @ts-expect-error: encoding as a string is valid.
       fileSystem.writeFileSync(filePath, data, encoding);
     },
 
     /**
-     * ?
+     * Writes the provided data (a JSON object) to the file.
+     * The file is written using the specified encoding (default: `utf8`).
+     * 
+     * @param {import('types').JsonValue} data
+     * @param {BufferEncoding} encoding
      */
     writeJson (data, encoding = 'utf8')
     {

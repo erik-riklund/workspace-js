@@ -1,7 +1,8 @@
 import { makeFileObject } from './file'
 
 /**
- * ?
+ * Creates a new folder object for the specified folder path.
+ * The object provides methods to interact with the folder and its contents.
  * 
  * @param {string} folderPath
  * @param {import('.').NodeFileSystem} fileSystem
@@ -10,7 +11,7 @@ export const makeFolderObject = (folderPath, fileSystem) =>
 {
   return {
     /**
-     * ?
+     * Returns the path to the folder as it was specified.
      */
     get path ()
     {
@@ -18,7 +19,7 @@ export const makeFolderObject = (folderPath, fileSystem) =>
     },
 
     /**
-     * ?
+     * Returns `true` if the folder exists, `false` otherwise.
      */
     get exists ()
     {
@@ -26,7 +27,7 @@ export const makeFolderObject = (folderPath, fileSystem) =>
     },
 
     /**
-     * ?
+     * Creates the folder if it does not exist.
      */
     create ()
     {
@@ -37,7 +38,7 @@ export const makeFolderObject = (folderPath, fileSystem) =>
     },
 
     /**
-     * ?
+     * Deletes the folder and its contents.
      */
     delete ()
     {
@@ -48,60 +49,55 @@ export const makeFolderObject = (folderPath, fileSystem) =>
     },
 
     /**
-     * ?
+     * Deletes the contents but leaves the folder.
      */
     clear ()
     {
       if (this.exists)
       {
         fileSystem.rmSync(folderPath, { recursive: true, force: true });
-
-        this.create();
+        fileSystem.mkdirSync(folderPath, { recursive: true });
       }
     },
 
     /**
-     * ?
+     * Returns a list of the files in the folder. The list can be either flat (default) or
+     * populated with subfolders (recursive). Each file name is relative to the folder path.
      * 
      * @returns {string[]}
      */
     read (options = { recursive: false })
     {
+      const fileList = [];
+
       if (!this.exists)
       {
+        // We throw an error instead of returning an empty array
+        // to avoid bugs that are hard to trace.
+
         throw new Error(`Folder "${folderPath}" does not exist.`);
       }
 
-      const fileList = [];
+      // The items in the folder are read recursively if the `recursive` option is set to `true`.
+      // Each item contains a `name` and a `parentPath` which are used to build its relative path.
+
       const items = fileSystem.readdirSync(
         folderPath, { withFileTypes: true, ...options }
       );
-
-      const rootFolderPath = folderPath.replace(/^\.*\//, '');
+      const rootFolderPath = folderPath.replace(/^(\.+\/)+/, '/');
 
       for (const item of items)
       {
         if (item.isFile())
         {
+          // Each file path returned in the resulting list is relative to the path of the folder object.
+          // The path is normalized to use forward slashes, and then the root folder path is stripped.
+
           const normalizedPath = item.parentPath.replace(/\\/g, '/');
+          const relativePath = (!normalizedPath || normalizedPath === '/')
+            ? '' : normalizedPath.slice(rootFolderPath.length + 1);
 
-          if (!normalizedPath || normalizedPath === '/')
-          {
-            fileList.push(item.name);
-
-            continue; // no parent folder.
-          }
-
-          const relativePath = normalizedPath.slice(rootFolderPath.length + 1);
-
-          if (!relativePath)
-          {
-            fileList.push(item.name); // no parent folder.
-          }
-          else
-          {
-            fileList.push(`${relativePath}/${item.name}`);
-          }
+          fileList.push(relativePath ? `${relativePath}/${item.name}` : item.name);
         }
       }
 
@@ -109,7 +105,7 @@ export const makeFolderObject = (folderPath, fileSystem) =>
     },
 
     /**
-     * ?
+     * Creates a new file object for the specified file name.
      * 
      * @param {string} fileName
      */
