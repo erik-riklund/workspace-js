@@ -114,7 +114,7 @@ export const makeFileObject = (filePath, fileSystem) =>
     },
 
     /**
-     * Writes the provided data (a JSON object) to the file.
+     * Writes the provided data (a JSON value) to the file.
      * The file is written using the specified encoding (default: `utf8`).
      * 
      * @param {import('types').JsonValue} data
