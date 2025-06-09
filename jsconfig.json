@@ -3,6 +3,7 @@
   {
     "allowJs": true,
     "checkJs": true,
+    "skipLibCheck": false,
     "baseUrl": "./",
 
     "paths":
@@ -10,11 +11,12 @@
       "module/*": [
         "modules/standalone/*/index.js",
         "modules/standalone/*",
-        "./modules/composite/*/index.js",
-        "./modules/composite/*"
+        "modules/composite/*/index.js",
+        "modules/composite/*"
       ],
       "types": [ "./types.js" ]
     }
   },
+
   "exclude": [ "node_modules" ]
 }

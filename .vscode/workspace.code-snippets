@@ -11,6 +11,7 @@
       "//"
     ]
   },
+
   "test":
   {
     "prefix": "test",
@@ -22,6 +23,19 @@
       "    // ...",
       "  }",
       ");"
+    ]
+  },
+
+  "types":
+  {
+    "prefix": "types",
+    "scope": "typescript",
+    "body": [
+      "export {};\n",
+      "declare global",
+      "{",
+      "  // ...",
+      "}"
     ]
   }
 }
