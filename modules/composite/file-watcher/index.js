@@ -1,4 +1,4 @@
-import { makePathFilter } from 'module/path-filter'
+import { makePathFilter } from 'modules/standalone/path-filter'
 
 /**
  * Creates a file watcher using the provided folder object and pattern.

@@ -8,8 +8,8 @@
     "paths":
     {
       "module/*": [
-        "./modules/atomic/*/index.js",
-        "./modules/atomic/*",
+        "modules/standalone/*/index.js",
+        "modules/standalone/*",
         "./modules/composite/*/index.js",
         "./modules/composite/*"
       ],
