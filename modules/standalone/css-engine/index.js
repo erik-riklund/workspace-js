@@ -3,11 +3,12 @@ import { transformTree } from './transformer'
 import { renderTreeToString } from './renderer'
 
 /**
- * ?
+ * Creates a new engine function that uses the provided plugins to perform
+ * input, transform, and output operations on a provided input string.
  * 
  * @param {CssEnginePlugin[]} plugins
  */
-export const makeEngine = (plugins) =>
+export const makeEngine = (plugins = []) =>
 {
   const inputPlugins = plugins.filter(
     (plugin) => plugin.stage === 'input'
@@ -18,8 +19,6 @@ export const makeEngine = (plugins) =>
   const outputPlugins = plugins.filter(
     (plugin) => plugin.stage === 'output'
   );
-
-  // ...
 
   /**
    * @param {string} input

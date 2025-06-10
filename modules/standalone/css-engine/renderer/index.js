@@ -88,7 +88,7 @@ const renderBlock = (context, block, state, parent = '') =>
       }
     }
 
-    if (block.properties)
+    if (block.properties?.length > 0)
     {
       state.output[context].push(
         `${ block.selectors.join(',') }{${ renderProperties(block.properties) }}`
