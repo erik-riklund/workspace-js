@@ -1,8 +1,6 @@
 {
-  "version": "1.0.0",
-  "name": "file-watcher",
-  "dependencies": {
-    "file-system-handler": "latest",
-    "path-filter": "latest"
-  }
+  "dependencies": [
+    "file-system-handler",
+    "path-filter"
+  ]
 }
