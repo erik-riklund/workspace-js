@@ -60,7 +60,7 @@ const renderBlock = (context, block, state, parent = '') =>
       state.output[context] = [];
     }
 
-    if (block.properties)
+    if (block.properties?.length > 0)
     {
       if (!parent)
       {
