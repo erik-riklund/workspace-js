@@ -1,106 +1,103 @@
-import { ParsingError } from './errors'
-
-import { handleOpeningBrace } from './delimiters/braces'
-import { handleClosingBrace } from './delimiters/braces'
-import { handleOpeningBracket } from './delimiters/brackets'
-import { handleClosingBracket } from './delimiters/brackets'
-import { handleAssignmentOperator } from './delimiters/assignment'
-import { handleLineBreak } from './delimiters/line-break'
-import { handleForwardSlash } from './delimiters/forward-slash'
-import { handleExclamationMark } from './delimiters/exclamation'
+import { handleClosingBrace } from './handlers/closing-brace'
+import { handleOpeningBrace } from './handlers/opening-brace'
+import { handleProperty } from './handlers/property'
 
 /**
- * Parse the provided input string and return a tree representation of it.
+ * ?
  * 
- * @param {string} input The input string to be parsed.
- * @returns {CssParserAbstractTree} A tree structure containing the parsed input broken down into blocks.
- * Each block has selectors, metadata, optional properties and possibly nested child blocks.
+ * @param {string} input
+ * @returns {CssEngine.AbstractTree}
  */
 export const createTreeFromString = (input) =>
 {
-  /** @type {CssParserState} */
-  const state =
+  const state = makeParserState(
+    input.split(/\r?\n/).map((line) => line.trim())
+  );
+
+  try
   {
-    tree: [],
-    stack: [],
-    buffer: '',
-
-    currentPosition: 0,
-    currentLine: 1,
-    currentColumn: 1,
-    currentProperty: '',
-    customProperty: null,
-
-    isComment: false,
-    isSelector: false,
-    isProperty: false,
-    isValue: false
-  };
-
-  // The parser works by iterating over the input string character by character,
-  // with each special delimiter being handled by a corresponding function.
-
-  while (state.currentPosition < input.length)
-  {
-    const currentCharacter = input[state.currentPosition];
-
-    switch (currentCharacter)
+    while (typeof state.currentLine === 'string')
     {
-      case '{': handleOpeningBrace(state); break;
-      case '}': handleClosingBrace(state); break;
-      case '[': handleOpeningBracket(state); break;
-      case ']': handleClosingBracket(state); break;
+      handleLine(state);
 
-      case '=': handleAssignmentOperator(state); break;
-      case '/': handleForwardSlash(state); break;
-      case '!': handleExclamationMark(state); break;
-      case '\n': handleLineBreak(state); break;
-
-      default: handleRest(state, currentCharacter); break;
+      state.currentLineIndex++;
     }
 
-    state.currentLine += (currentCharacter === '\n') ? 1 : 0;
-    state.currentColumn = (currentCharacter === '\n') ? 1 : state.currentColumn + 1;
+    if (state.currentBlock)
+    {
+      throw new Error('Unexpected end of string (missing closing brace)');
+    }
 
-    state.currentPosition++;
+    return state.tree;
   }
-
-  if (state.stack.length > 0)
+  catch (error)
   {
-    // The parser reached the end of the input string, but there are still open
-    // blocks in the stack. This is reported as an unexpected end of string error,
-    // pointing out that a closing brace '}' is missing.
-
-    throw new ParsingError('Unexpected end of string (missing closing brace)', state);
+    throw new Error(
+      `css-engine: ${error.message} @ line ${state.currentLineIndex + 1}`
+    );
   }
-
-  return state.tree;
-};
+}
 
 /**
- * @param {CssParserState} state
- * @param {string} character
+ * ?
+ * 
+ * @param {string[]} lines
  */
-const handleRest = (state, character) =>
+export const makeParserState = (lines) =>
 {
-  if (!state.isComment)
-  {
-    //
+  return {
+    tree: [],
+    stack: [],
+    buffer: [],
 
-    if (state.customProperty)
+    currentLineIndex: 0,
+
+    get currentLine ()
     {
-      // 
+      return lines[this.currentLineIndex] || null;
+    },
 
-      const property = state.customProperty;
+    get nextLine ()
+    {
+      return lines[this.currentLineIndex + 1] || null;
+    },
 
-      if (property.key === '!' && character === ' ')
-      {
-        property.key = `!${ state.buffer.trim() }`;
+    get previousLine ()
+    {
+      return lines[this.currentLineIndex - 1] || null;
+    },
 
-        state.buffer = '';
-      }
+    /**
+     * @returns {MaybeNull<CssEngine.Block>}
+     */
+    get currentBlock ()
+    {
+      return this.stack[this.stack.length - 1] || null;
     }
+  }
+}
 
-    state.buffer += character;
+/**
+ * ?
+ * 
+ * @param {CssEngine.ParserState} state
+ */
+const handleLine = (state) =>
+{
+  const currentLine = state.currentLine;
+
+  if (currentLine === '{')
+  {
+    handleOpeningBrace(state);
+  }
+  else if (currentLine === '}')
+  {
+    handleClosingBrace(state);
+  }
+  else
+  {
+    state.buffer.push(currentLine);
+
+    handleProperty(state);
   }
 }

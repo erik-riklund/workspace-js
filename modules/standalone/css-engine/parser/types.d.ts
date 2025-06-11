@@ -1,38 +1,40 @@
-export {};
+import { makeParserState } from '.'
 
 declare global
 {
-  interface CssParserState
+  namespace CssEngine
   {
-    tree: CssParserAbstractTree,
-    stack: Array<CssParserBlock>,
-    buffer: string,
+    /**
+     * ?
+     */
+    type AbstractTree = Array<Block>;
 
-    currentPosition: number,
-    currentLine: number,
-    currentColumn: number,
-    currentProperty: string,
+    /**
+     * ?
+     */
+    interface Block
+    {
+      selectors: string[],
+      properties?: Property[],
+      rawProperties?: RawProperty[],
+      children?: AbstractTree,
 
-    isComment: boolean,
-    isSelector: boolean,
-    isProperty: boolean,
-    isValue: boolean,
-
-    customProperty: CssPropertyDeclaration | null
-  }
-
-  interface CssParserBlock
-  {
-    selectors: string[],
-    properties?: CssPropertyDeclaration[],
-    children?: CssParserAbstractTree,
-
-    metadata: {
-      startsAt: { line: number, column: number },
-      endsAt?: { line: number, column: number }
+      metadata: { line: number }
     }
-  }
 
-  type CssParserAbstractTree = Array<CssParserBlock>;
-  type CssPropertyDeclaration = { key: string, value: string, line: number };
+    /**
+     * ?
+     */
+    type Property = { key: string, value: string };
+
+    /**
+     * ?
+     */
+    type RawProperty = string;
+
+    /**
+     * ?
+     */
+    type ParserState = ReturnType<typeof makeParserState>;
+  }
 }

@@ -2,13 +2,14 @@ export class RenderingError extends Error
 {
   /**
    * @param {string} message
-   * @param {CssParserBlock} block
+   * @param {CssEngine.Block} block
    */
   constructor(message, block)
   {
-    super(`<CSS-engine> Rendering error:\n${message}` +
-      ` @ line ${block.metadata.startsAt.line}, column ${block.metadata.startsAt.column}.`
+    super(
+      `<CSS-engine> Rendering error:\n${message} @ line ${block.metadata.line}.`
     );
+    
     this.name = 'RenderingError';
   }
 }

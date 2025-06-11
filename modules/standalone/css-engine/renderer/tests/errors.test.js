@@ -7,11 +7,10 @@ import { renderTreeToString } from '..'
 it('should throw an error when encountering selectors mixed with media queries',
   () =>
   {
-    /** @type {CssParserAbstractTree} */
     const tree = [
       {
         selectors: ['@media screen and(min-width:576px)', 'h1'],
-        metadata: { startsAt: { line: 1, column: 1 }, endsAt: { line: 1, column: 1 } }
+        metadata: { line: 1 }
       }
     ];
 
@@ -22,16 +21,11 @@ it('should throw an error when encountering selectors mixed with media queries',
 it('should throw an error when encountering nested media queries',
   () =>
   {
-    /** @type {CssParserAbstractTree} */
     const tree = [
       {
-        selectors: ['@media screen and(min-width:576px)'],
-        metadata: { startsAt: { line: 1, column: 1 }, endsAt: { line: 1, column: 1 } },
+        selectors: ['@media screen and(min-width:576px)'], metadata: { line: 1 },
         children: [
-          {
-            selectors: ['@media screen and(min-width:768px)'],
-            metadata: { startsAt: { line: 1, column: 1 }, endsAt: { line: 1, column: 1 } }
-          }
+          { selectors: ['@media screen and(min-width:768px)'], metadata: { line: 1 } }
         ]
       }
     ];
@@ -43,16 +37,11 @@ it('should throw an error when encountering nested media queries',
 it('should throw an error on nested color-scheme media queries',
   () =>
   {
-    /** @type {CssParserAbstractTree} */
     const tree = [
       {
-        selectors: ['@media (prefers-color-scheme: dark)'],
-        metadata: { startsAt: { line: 1, column: 1 }, endsAt: { line: 1, column: 1 } },
+        selectors: ['@media (prefers-color-scheme: dark)'], metadata: { line: 1 },
         children: [
-          {
-            selectors: ['@media (prefers-color-scheme: light)'],
-            metadata: { startsAt: { line: 1, column: 1 }, endsAt: { line: 1, column: 1 } }
-          }
+          { selectors: ['@media (prefers-color-scheme: light)'], metadata: { line: 1 } }
         ]
       }
     ];
@@ -64,12 +53,11 @@ it('should throw an error on nested color-scheme media queries',
 it('should throw an error when encountering property declarations without a parent reference',
   () =>
   {
-    /** @type {CssParserAbstractTree} */
     const tree = [
       {
         selectors: ['@media screen and (min-width: 576px)'],
-        properties: [{ key: 'color', value: 'red', line: 1 }],
-        metadata: { startsAt: { line: 1, column: 1 }, endsAt: { line: 1, column: 1 } }
+        properties: [{ key: 'color', value: 'red' }],
+        metadata: { line: 1 }
       }
     ];
 

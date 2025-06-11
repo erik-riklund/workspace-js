@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { it, expect } from 'bun:test'
 import { renderTreeToString } from '..'
 
@@ -7,16 +9,7 @@ import { renderTreeToString } from '..'
 it('should not render an empty block',
   () =>
   {
-    /** @type {CssParserAbstractTree} */
-    const tree = [
-      {
-        selectors: ['h1'],
-        metadata: {
-          startsAt: { line: 1, column: 1 },
-          endsAt: { line: 1, column: 1 }
-        }
-      }
-    ];
+    const tree = [{ selectors: ['h1'] }];
 
     expect(renderTreeToString(tree)).toEqual('');
   }
@@ -25,18 +18,13 @@ it('should not render an empty block',
 it('should render a block with properties',
   () =>
   {
-    /** @type {CssParserAbstractTree} */
     const tree = [
       {
         selectors: ['h1'],
         properties: [
-          { key: 'color', value: 'red', line: 1 },
-          { key: 'background-color', value: 'blue', line: 1 }
+          { key: 'color', value: 'red' },
+          { key: 'background-color', value: 'blue' }
         ],
-        metadata: {
-          startsAt: { line: 1, column: 1 },
-          endsAt: { line: 1, column: 1 }
-        }
       }
     ];
 
@@ -47,16 +35,7 @@ it('should render a block with properties',
 it('should not render an empty block with multiple selectors',
   () =>
   {
-    /** @type {CssParserAbstractTree} */
-    const tree = [
-      {
-        selectors: ['h1', 'h2'],
-        metadata: {
-          startsAt: { line: 1, column: 1 },
-          endsAt: { line: 1, column: 1 }
-        }
-      }
-    ];
+    const tree = [{ selectors: ['h1', 'h2'] }];
 
     expect(renderTreeToString(tree)).toEqual('');
   }
@@ -65,18 +44,13 @@ it('should not render an empty block with multiple selectors',
 it('should render a block with multiple selectors and properties',
   () =>
   {
-    /** @type {CssParserAbstractTree} */
     const tree = [
       {
         selectors: ['h1', 'h2'],
         properties: [
-          { key: 'color', value: 'red', line: 1 },
-          { key: 'background-color', value: 'blue', line: 1 }
-        ],
-        metadata: {
-          startsAt: { line: 1, column: 1 },
-          endsAt: { line: 1, column: 1 }
-        }
+          { key: 'color', value: 'red' },
+          { key: 'background-color', value: 'blue' }
+        ]
       }
     ];
 
@@ -87,29 +61,11 @@ it('should render a block with multiple selectors and properties',
 it('should not render empty nested blocks',
   () =>
   {
-    /** @type {CssParserAbstractTree} */
     const tree = [
       {
         selectors: ['div'],
-        metadata: {
-          startsAt: { line: 1, column: 1 },
-          endsAt: { line: 1, column: 1 }
-        },
         children: [
-          {
-            selectors: ['h1'],
-            metadata: {
-              startsAt: { line: 1, column: 1 },
-              endsAt: { line: 1, column: 1 }
-            }
-          },
-          {
-            selectors: ['span'],
-            metadata: {
-              startsAt: { line: 1, column: 1 },
-              endsAt: { line: 1, column: 1 }
-            }
-          }
+          { selectors: ['h1'] }, { selectors: ['span'] }
         ]
       }
     ];
@@ -121,36 +77,23 @@ it('should not render empty nested blocks',
 it('should render nested blocks with properties',
   () =>
   {
-    /** @type {CssParserAbstractTree} */
     const tree = [
       {
         selectors: ['div'],
-        metadata: {
-          startsAt: { line: 1, column: 1 },
-          endsAt: { line: 1, column: 1 }
-        },
         children: [
           {
             selectors: ['h1'],
             properties: [
-              { key: 'color', value: 'red', line: 1 },
-              { key: 'background-color', value: 'blue', line: 1 }
-            ],
-            metadata: {
-              startsAt: { line: 1, column: 1 },
-              endsAt: { line: 1, column: 1 }
-            }
+              { key: 'color', value: 'red' },
+              { key: 'background-color', value: 'blue' }
+            ]
           },
           {
             selectors: ['span'],
             properties: [
-              { key: 'color', value: 'blue', line: 1 },
-              { key: 'background-color', value: 'red', line: 1 }
+              { key: 'color', value: 'blue' },
+              { key: 'background-color', value: 'red' }
             ],
-            metadata: {
-              startsAt: { line: 1, column: 1 },
-              endsAt: { line: 1, column: 1 }
-            }
           }
         ]
       }
@@ -165,31 +108,18 @@ it('should render nested blocks with properties',
 it('should render a deeply nested block with a single property',
   () =>
   {
-    /** @type {CssParserAbstractTree} */
     const tree = [
       {
         selectors: ['div'],
-        metadata: {
-          startsAt: { line: 1, column: 1 },
-          endsAt: { line: 1, column: 1 }
-        },
         children: [
           {
             selectors: ['h1'],
-            metadata: {
-              startsAt: { line: 1, column: 1 },
-              endsAt: { line: 1, column: 1 }
-            },
             children: [
               {
                 selectors: ['span'],
                 properties: [
-                  { key: 'color', value: 'red', line: 1 }
-                ],
-                metadata: {
-                  startsAt: { line: 1, column: 1 },
-                  endsAt: { line: 1, column: 1 }
-                }
+                  { key: 'color', value: 'red' }
+                ]
               }
             ]
           }
@@ -204,24 +134,13 @@ it('should render a deeply nested block with a single property',
 it('should render a block inside a responsive media query',
   () =>
   {
-    /** @type {CssParserAbstractTree} */
     const tree = [
       {
         selectors: ['@media screen and (min-width: 576px)'],
-        metadata: {
-          startsAt: { line: 1, column: 1 },
-          endsAt: { line: 1, column: 1 }
-        },
         children: [
           {
             selectors: ['h1'],
-            properties: [
-              { key: 'color', value: 'red', line: 1 }
-            ],
-            metadata: {
-              startsAt: { line: 1, column: 1 },
-              endsAt: { line: 1, column: 1 }
-            }
+            properties: [{ key: 'color', value: 'red' }]
           }
         ]
       }
@@ -236,43 +155,22 @@ it('should render a block inside a responsive media query',
 it('should render root-level blocks alongside responsive media queries',
   () =>
   {
-    /** @type {CssParserAbstractTree} */
     const tree = [
       {
         selectors: ['div'],
-        metadata: {
-          startsAt: { line: 1, column: 1 },
-          endsAt: { line: 1, column: 1 }
-        },
         children: [
           {
             selectors: ['h1'],
-            properties: [
-              { key: 'color', value: 'red', line: 1 }
-            ],
-            metadata: {
-              startsAt: { line: 1, column: 1 },
-              endsAt: { line: 1, column: 1 }
-            }
+            properties: [{ key: 'color', value: 'red' }]
           }
         ]
       },
       {
         selectors: ['@media screen and (min-width: 576px)'],
-        metadata: {
-          startsAt: { line: 1, column: 1 },
-          endsAt: { line: 1, column: 1 }
-        },
         children: [
           {
             selectors: ['h2'],
-            properties: [
-              { key: 'color', value: 'blue', line: 1 }
-            ],
-            metadata: {
-              startsAt: { line: 1, column: 1 },
-              endsAt: { line: 1, column: 1 }
-            }
+            properties: [{ key: 'color', value: 'blue' }]
           }
         ]
       }
@@ -287,27 +185,14 @@ it('should render root-level blocks alongside responsive media queries',
 it('should render properties inside a responsive media query nested inside another block',
   () =>
   {
-    /** @type {CssParserAbstractTree} */
     const tree = [
       {
         selectors: ['div'],
-        properties: [
-          { key: 'color', value: 'red', line: 1 }
-        ],
-        metadata: {
-          startsAt: { line: 1, column: 1 },
-          endsAt: { line: 1, column: 1 }
-        },
+        properties: [{ key: 'color', value: 'red' }],
         children: [
           {
             selectors: ['@media screen and (min-width: 576px)'],
-            properties: [
-              { key: 'color', value: 'blue', line: 1 }
-            ],
-            metadata: {
-              startsAt: { line: 1, column: 1 },
-              endsAt: { line: 1, column: 1 }
-            }
+            properties: [{ key: 'color', value: 'blue' }]
           }
         ]
       }
@@ -322,26 +207,15 @@ it('should render properties inside a responsive media query nested inside anoth
 it('should render a `prefers-color-scheme` media query',
   () =>
   {
-    /** @type {CssParserAbstractTree} */
     const tree = [
       {
         selectors: [
           '@media (prefers-color-scheme: dark)'
         ],
-        metadata: {
-          startsAt: { line: 1, column: 1 },
-          endsAt: { line: 1, column: 1 }
-        },
         children: [
           {
             selectors: ['h1'],
-            properties: [
-              { key: 'color', value: 'white', line: 1 }
-            ],
-            metadata: {
-              startsAt: { line: 1, column: 1 },
-              endsAt: { line: 1, column: 1 }
-            }
+            properties: [{ key: 'color', value: 'white' }]
           }
         ]
       }
@@ -356,38 +230,23 @@ it('should render a `prefers-color-scheme` media query',
 it('should append a `prefers-color-scheme` media query to an active responsive media query',
   () =>
   {
-    /** @type {CssParserAbstractTree} */
     const tree = [
       {
         selectors: [
           '@media screen and (min-width: 576px)'
         ],
-        metadata: {
-          startsAt: { line: 1, column: 1 },
-          endsAt: { line: 1, column: 1 }
-        },
         children: [
           {
             selectors: ['h1'],
-            properties: [
-              { key: 'color', value: 'black', line: 1 }
-            ],
-            metadata: {
-              startsAt: { line: 1, column: 1 },
-              endsAt: { line: 1, column: 1 }
-            },
+            properties: [{ key: 'color', value: 'black'}],
             children: [
               {
                 selectors: [
                   '@media (prefers-color-scheme: dark)'
                 ],
                 properties: [
-                  { key: 'color', value: 'white', line: 1 }
-                ],
-                metadata: {
-                  startsAt: { line: 1, column: 1 },
-                  endsAt: { line: 1, column: 1 }
-                }
+                  { key: 'color', value: 'white'}
+                ]
               }
             ]
           }

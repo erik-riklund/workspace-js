@@ -3,12 +3,12 @@ import { RenderingError } from './errors'
 /**
  * Performs rendering on the provided tree, returning the output as a string.
  * 
- * @param {CssParserAbstractTree} tree
+ * @param {CssEngine.AbstractTree} tree
  * @returns {string}
  */
 export const renderTreeToString = (tree) =>
 {
-  /** @type {CssRenderState} */
+  /** @type {CssEngine.RenderState} */
   const state = { output: { root: [] } };
 
   for (const block of tree)
@@ -28,8 +28,8 @@ export const renderTreeToString = (tree) =>
 
 /**
  * @param {string} context
- * @param {CssParserBlock} block
- * @param {CssRenderState} state
+ * @param {CssEngine.Block} block
+ * @param {CssEngine.RenderState} state
  * @param {string} parent
  */
 const renderBlock = (context, block, state, parent = '') =>
@@ -111,7 +111,7 @@ const renderBlock = (context, block, state, parent = '') =>
 }
 
 /**
- * @param {CssParserBlock} block
+ * @param {CssEngine.Block} block
  */
 const blockHasMediaQuery = (block) =>
 {
@@ -121,7 +121,7 @@ const blockHasMediaQuery = (block) =>
 }
 
 /**
- * @param {CssParserBlock} block
+ * @param {CssEngine.Block} block
  */
 const blockSelectorIsResponsiveMediaQuery = (block) =>
 {
@@ -139,7 +139,7 @@ const contextContainsResponsiveMediaQuery = (context) =>
 }
 
 /**
- * @param {CssParserBlock} block
+ * @param {CssEngine.Block} block
  */
 const blockSelectorIsColorSchemeMediaQuery = (block) =>
 {
@@ -171,7 +171,7 @@ const appendMediaQueryToContext = (context, mediaQuery) =>
 }
 
 /**
- * @param {CssPropertyDeclaration[]} properties
+ * @param {CssEngine.Property[]} properties
  */
 const renderProperties = (properties = []) =>
 {

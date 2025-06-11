@@ -1,54 +1,33 @@
 import { it, expect } from 'bun:test'
 import { createTreeFromString } from '..'
 
-// The tests in this file are used to verify that the parser correctly parses
-// the given input strings into the expected tree structure.
-
-it('should parse a single block without properties',
+it('should return an empty tree when the input string is empty',
   () =>
   {
-    const input = 'div{}';
+    expect(createTreeFromString('')).toEqual([]);
+  }
+);
+
+it('should parse an empty block',
+  () =>
+  {
+    const input = 'div\n{\n}'
 
     expect(createTreeFromString(input)).toEqual([
-      {
-        selectors: ['div'],
-        metadata: {
-          startsAt: { line: 1, column: 4 },
-          endsAt: { line: 1, column: 5 }
-        }
-      }
+      { selectors: ['div'], metadata: { line: 1 } }
     ]);
   }
 );
 
-it('should parse nested blocks without properties',
+it('should parse nested empty blocks',
   () =>
   {
-    const input = 'div{h1{}span{}}';
+    const input = 'div\n{\nspan\n{\n}\n}';
 
     expect(createTreeFromString(input)).toEqual([
       {
-        selectors: ['div'],
-        metadata: {
-          startsAt: { line: 1, column: 4 },
-          endsAt: { line: 1, column: 15 }
-        },
-        children: [
-          {
-            selectors: ['h1'],
-            metadata: {
-              startsAt: { line: 1, column: 7 },
-              endsAt: { line: 1, column: 8 }
-            }
-          },
-          {
-            selectors: ['span'],
-            metadata: {
-              startsAt: { line: 1, column: 13 },
-              endsAt: { line: 1, column: 14 }
-            }
-          }
-        ]
+        selectors: ['div'], metadata: { line: 1 },
+        children: [{ selectors: ['span'], metadata: { line: 3 } }]
       }
     ]);
   }
@@ -57,18 +36,26 @@ it('should parse nested blocks without properties',
 it('should parse a block with a single property',
   () =>
   {
-    const input = 'div{color=red\n}';
+    const input = 'div\n{\ncolor:red\n}';
 
     expect(createTreeFromString(input)).toEqual([
       {
-        selectors: ['div'],
-        properties: [
-          { key: 'color', value: 'red', line: 1 }
-        ],
-        metadata: {
-          startsAt: { line: 1, column: 4 },
-          endsAt: { line: 2, column: 1 }
-        }
+        selectors: ['div'], metadata: { line: 1 },
+        rawProperties: ['color:red']
+      }
+    ]);
+  }
+);
+
+it('should parse a block with a single custom property',
+  () =>
+  {
+    const input = 'div\n{\n!test hello\nworld.\n}';
+
+    expect(createTreeFromString(input)).toEqual([
+      {
+        selectors: ['div'], metadata: { line: 1 },
+        rawProperties: ['!test hello world.']
       }
     ]);
   }
@@ -77,19 +64,12 @@ it('should parse a block with a single property',
 it('should parse a block with multiple properties',
   () =>
   {
-    const input = 'div{color=red\nbackground-color=blue\n}';
+    const input = 'div\n{\ncolor:red\nbackground-color:blue\n}';
 
     expect(createTreeFromString(input)).toEqual([
       {
-        selectors: ['div'],
-        properties: [
-          { key: 'color', value: 'red', line: 1 },
-          { key: 'background-color', value: 'blue', line: 2 }
-        ],
-        metadata: {
-          startsAt: { line: 1, column: 4 },
-          endsAt: { line: 3, column: 1 }
-        }
+        selectors: ['div'], metadata: { line: 1 },
+        rawProperties: ['color:red', 'background-color:blue']
       }
     ]);
   }
@@ -98,82 +78,21 @@ it('should parse a block with multiple properties',
 it('should parse nested blocks with properties',
   () =>
   {
-    const input = 'div{color=yellow\nh1{color=red\n}span{color=blue\n}}';
+    const input = 'div\n{\nspan\n{\ncolor:red\n}\nh1\n{\nbackground-color:blue\n}\n}';
 
     expect(createTreeFromString(input)).toEqual([
       {
-        selectors: ['div'],
-        properties: [
-          { key: 'color', value: 'yellow', line: 1 }
-        ],
-        metadata: {
-          startsAt: { line: 1, column: 4 },
-          endsAt: { line: 4, column: 2 }
-        },
-
+        selectors: ['div'], metadata: { line: 1 },
         children: [
           {
-            selectors: ['h1'],
-            properties: [
-              { key: 'color', value: 'red', line: 2 }
-            ],
-            metadata: {
-              startsAt: { line: 2, column: 3 },
-              endsAt: { line: 3, column: 1 }
-            }
+            selectors: ['span'], metadata: { line: 3 },
+            rawProperties: ['color:red']
           },
           {
-            selectors: ['span'],
-            properties: [
-              { key: 'color', value: 'blue', line: 3 }
-            ],
-            metadata: {
-              startsAt: { line: 3, column: 6 },
-              endsAt: { line: 4, column: 1 }
-            }
+            selectors: ['h1'], metadata: { line: 7 },
+            rawProperties: ['background-color:blue']
           }
         ]
-      }
-    ]);
-  }
-);
-
-it('should parse a custom property declaration ending with a closing brace',
-  () =>
-  {
-    const input = 'div{!include black border, white background}';
-
-    expect(createTreeFromString(input)).toEqual([
-      {
-        selectors: ['div'],
-        properties: [
-          { key: '!include', value: 'black border, white background', line: 1 }
-        ],
-        metadata: {
-          startsAt: { line: 1, column: 4 },
-          endsAt: { line: 1, column: 44 }
-        }
-      }
-    ]);
-  }
-);
-
-it('should parse a custom property declaration ending with a double line break',
-  () =>
-  {
-    const input = 'div{!include black border, white background\n\ncolor = red\n}';
-
-    expect(createTreeFromString(input)).toEqual([
-      {
-        selectors: ['div'],
-        properties: [
-          { key: '!include', value: 'black border, white background', line: 1 },
-          { key: 'color', value: 'red', line: 3 }
-        ],
-        metadata: {
-          startsAt: { line: 1, column: 4 },
-          endsAt: { line: 4, column: 1 }
-        }
       }
     ]);
   }

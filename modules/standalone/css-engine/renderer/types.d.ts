@@ -2,5 +2,8 @@ export {};
 
 declare global
 {
-  type CssRenderState = { output: Record<string, string[]> };
+  namespace CssEngine
+  {
+    type RenderState = { output: Record<string, string[]> };
+  }
 }
