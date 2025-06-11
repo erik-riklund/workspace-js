@@ -3,7 +3,11 @@
   "editor.links": false,
 
   // Specifies the files and folders that should not be shown in the workspace explorer.
-  "files.exclude": { "**/node_modules": true, "**/bun.lock": true },
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/desktop.ini": true,
+    "**/bun.lock": true
+  },
 
   // Options controlling the formatting of JSON files.
   "json.format.enable": true,
