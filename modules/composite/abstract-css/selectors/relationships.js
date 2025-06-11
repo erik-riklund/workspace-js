@@ -3,7 +3,11 @@ const operators = {
   child: '>', sibling: '~', adjacent: '+', descendant: ' '
 };
 
-/** @param {string} selector */
+/**
+ * Handles relationship selectors, e.g. `child div` or `child class foo`.
+ * 
+ * @param {string} selector
+ */
 export const handleRelationshipSelector = (selector) =>
 {
   const [relation, ...input] = selector.split(' ');

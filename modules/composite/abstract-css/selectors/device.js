@@ -6,7 +6,11 @@ const deviceRanges = {
   desktop: { lower: '1440px', upper: null }
 };
 
-/** @param {string} selector */
+/**
+ * Handles device selectors, e.g. `device tablet`.
+ * 
+ * @param {string} selector
+ */
 export const handleDeviceSelector = (selector) =>
 {
   return `@media screen and${selector.includes('..')

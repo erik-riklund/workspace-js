@@ -4,7 +4,7 @@ import { abstractSelectorsPlugin } from './plugin'
 /**
  * Creates a new engine function that enables the use of plain-language selectors.
  * 
- * @param {CssEnginePlugin[]} plugins
+ * @param {CssEngine.Plugin[]} plugins
  */
 export const makeAbstractCssEngine = (plugins = []) => 
 {

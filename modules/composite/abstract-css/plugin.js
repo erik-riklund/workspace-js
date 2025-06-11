@@ -32,7 +32,7 @@ const selectorHandlers =
   'device': handleDeviceSelector
 }
 
-/** @type {CssEnginePlugin} */
+/** @type {CssEngine.Plugin} */
 export const abstractSelectorsPlugin =
 {
   stage: 'transform',

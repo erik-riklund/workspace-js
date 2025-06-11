@@ -1,4 +1,8 @@
-/** @param {string} selector */
+/**
+ * Handles attribute selectors, e.g. `attribute foo`.
+ * 
+ * @param {string} selector
+ */
 export const handleAttributeSelector = (selector) =>
 {
   const [attribute, ...input] = selector.split(' ').slice(1);
