@@ -1,4 +1,5 @@
 import { handleAttributeSelector } from './selectors/attributes'
+import { handleDeviceSelector } from './selectors/device'
 import { handleIdentifierSelector } from './selectors/identifiers'
 import { handleRelationshipSelector } from './selectors/relationships'
 
@@ -22,7 +23,13 @@ const selectorHandlers =
   // Attributes are used to select elements that have a specific attribute,
   // e.g. `attribute data-foo` selects all elements that have a `data-foo` attribute.
 
-  'attribute': handleAttributeSelector
+  'attribute': handleAttributeSelector,
+
+  // Device selectors are used to specify styles that should only be applied
+  // to specific devices, e.g. `device tablet only` scopes the properties and
+  // selectors within it to only apply to tablets.
+
+  'device': handleDeviceSelector
 }
 
 /** @type {CssEnginePlugin} */
