@@ -1,12 +1,12 @@
 import { it, expect } from 'bun:test'
-import { makeAbstractCssEngine } from '..'
+import { makeAbstractCssEngine } from '../../..'
 
 const engine = makeAbstractCssEngine();
 
 it('should transform a `device *` selector',
   () =>
   {
-    const input = 'device tablet\n{\nspan\n{\ncolor:red\n}\n}';
+    const input = "device tablet\n{\nspan\n{\ncolor:red\n}\n}";
 
     expect(engine(input)).toBe(
       '@media screen and(min-width:576px)and(max-width:1023px){span{color:red}}'
@@ -14,10 +14,10 @@ it('should transform a `device *` selector',
   }
 );
 
-it('should transform a `device * ..` selector',
+it('should transform a `device *..` selector',
   () =>
   {
-    const input = 'device tablet ..\n{\nspan\n{\ncolor:red\n}\n}';
+    const input = 'device tablet..\n{\nspan\n{\ncolor:red\n}\n}';
 
     expect(engine(input)).toBe(
       '@media screen and(min-width:576px){span{color:red}}'
@@ -25,10 +25,10 @@ it('should transform a `device * ..` selector',
   }
 );
 
-it('should transform a `device .. *` selector',
+it('should transform a `device ..*` selector',
   () =>
   {
-    const input = 'device .. tablet\n{\nspan\n{\ncolor:red\n}\n}';
+    const input = 'device ..tablet\n{\nspan\n{\ncolor:red\n}\n}';
 
     expect(engine(input)).toBe(
       '@media screen and(max-width:1023px){span{color:red}}'

@@ -1,5 +1,5 @@
 import { it, expect } from 'bun:test'
-import { makeAbstractCssEngine } from '..'
+import { makeAbstractCssEngine } from '../../..'
 
 const engine = makeAbstractCssEngine();
 
