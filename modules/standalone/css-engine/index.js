@@ -85,7 +85,7 @@ const transformStandardProperties =
         {
           const [key, value] = content.split(/\s*:\s*/);
 
-          block.setProperty(key, value);
+          block.setProperty(key, value.replace(/;$/, ''));
         }
       }
     )
