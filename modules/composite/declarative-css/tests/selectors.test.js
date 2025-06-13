@@ -8,6 +8,6 @@ it('should transform a `class *` selector',
   {
     const input = 'class foo';
 
-    expect(handleSelectors([input])).toEqual(['.foo']);
+    expect(handleSelectors([input])).toEqual(['&.foo']);
   }
 );

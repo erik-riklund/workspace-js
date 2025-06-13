@@ -1,12 +1,14 @@
 import { parseSelector } from '../helpers'
 import { handleClassSelector } from './selectors/identifiers'
+import { handleUniqueSelector } from './selectors/identifiers'
 
 /**
  * ?
  */
 const selectorHandlers =
 {
-  'class': [handleClassSelector, ['selector', 'name']]
+  'class': [handleClassSelector, ['selector', 'name']],
+  'unique': [handleUniqueSelector, ['selector', 'name']]
 };
 
 /**

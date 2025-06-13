@@ -3,7 +3,7 @@
  * The object provides methods to interact with the file.
  * 
  * @param {string} filePath
- * @param {IFileSystem} fileSystem
+ * @param {FileHandler.FileSystem} fileSystem
  */
 export const makeFileObject = (filePath, fileSystem) =>
 {

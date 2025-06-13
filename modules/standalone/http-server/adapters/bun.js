@@ -1,7 +1,7 @@
 /**
  * Creates a new server adapter using Bun's HTTP server.
  * 
- * @returns {IHttpServerAdapter}
+ * @returns {HttpServer.Adapter}
  */
 export const makeHttpServerAdapter = () =>
 {
@@ -59,7 +59,7 @@ export const makeHttpServerAdapter = () =>
 
 /**
  * @param {Request} request
- * @returns {IHttpServerRequestContext}
+ * @returns {HttpServer.RequestContext}
  */
 export const makeHttpServerRequestContext = (request) =>
 {
@@ -74,15 +74,15 @@ export const makeHttpServerRequestContext = (request) =>
 }
 
 /**
- * @param {HttpServerRoute[]} routes
- * @param {HttpServerMiddleware[]} middlewares
+ * @param {HttpServer.Route[]} routes
+ * @param {HttpServer.Middleware[]} middlewares
  */
 const createRoutePipelines = (routes, middlewares) =>
 {
   const pipelines = {};
 
   /**
-   * @param {HttpMethod} routeMethod
+   * @param {HttpServer.RequestMethod} routeMethod
    * @param {string} routePath
    */
   const createMiddlewareStack = (routeMethod, routePath) =>

@@ -2,9 +2,34 @@ import { makeFileWatcher } from '.'
 
 declare global
 {
-  type FileWatcher = ReturnType<typeof makeFileWatcher>;
-  type FileWatcherOptions = { interval: number, debounce: number };
-  type FileWatcherState = { callback: FileWatcherCallback, invoked: number };
-  type FileWatcherCallback = (file: FileObject) => void;
-  type TrackedFileState = { file: FileObject, modified: number };
+  namespace FileWatcher
+  {
+    /**
+     * A function type that is called when a tracked file changes.
+     */
+    type Callback = (file: FileObject) => void;
+
+    /**
+     * The type of an instantiated file watcher, returned by `makeFileWatcher`.
+     */
+    type Instance = ReturnType<typeof makeFileWatcher>;
+
+    /**
+     * Represents a single listener registered with the file watcher,
+     * including its callback function and a timestamp of the last time it was invoked.
+     */
+    type Listener = { callback: Callback, lastInvoked: number };
+
+    /**
+     * Configuration options for the file watcher,
+     * controlling check interval and debounce time.
+     */
+    type Options = { interval: number, debounce: number };
+
+    /**
+     * Represents the current state of a file being tracked, including
+     * the file object itself and its last known modification timestamp.
+     */
+    type TrackedFileState = { file: FileObject, modified: number };
+  }
 }

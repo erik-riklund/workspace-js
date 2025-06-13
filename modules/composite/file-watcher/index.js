@@ -1,17 +1,17 @@
-import { makePathFilter } from 'modules/standalone/path-filter'
+import { makePathFilter } from 'module/path-filter'
 
 /**
  * Creates a file watcher using the provided folder object and pattern.
  * 
- * @param {FolderObject} folder
+ * @param {FileHandler.FolderObject} folder
  * @param {string} pattern
- * @param {Partial<FileWatcherOptions>} options
+ * @param {Partial<FileWatcher.Options>} options
  */
 export const makeFileWatcher = (folder, pattern, options = {}) =>
 {
   options = { interval: 500, debounce: 100, ...options };
 
-  /** @type {Record<string, FileWatcherState[]>} */
+  /** @type {Record<string, FileWatcher.Listener[]>} */
   const watchers = { create: [], change: [], delete: [] };
   const trackedFiles = { current: {}, previous: {} };
 
@@ -21,7 +21,7 @@ export const makeFileWatcher = (folder, pattern, options = {}) =>
    * Invokes the watchers for the specified event.
    * 
    * @param {'create'|'change'|'delete'} event
-   * @param {FileObject} file
+   * @param {FileHandler.FileObject} file
    */
   const invokeWatchers = (event, file) =>
   {
@@ -30,10 +30,10 @@ export const makeFileWatcher = (folder, pattern, options = {}) =>
 
     for (const watcher of watchers[event])
     {
-      if (now - watcher.invoked > debounce)
+      if (now - watcher.lastInvoked > debounce)
       {
         watcher.callback(file);
-        watcher.invoked = now;
+        watcher.lastInvoked = now;
       }
     }
   }
@@ -54,7 +54,7 @@ export const makeFileWatcher = (folder, pattern, options = {}) =>
     {
       const file = folder.file(filePath);
 
-      /** @type {TrackedFileState} */
+      /** @type {FileWatcher.TrackedFileState} */
       const state = { file, modified: file.lastModified };
 
       trackedFiles.current[filePath] = state;
@@ -92,11 +92,11 @@ export const makeFileWatcher = (folder, pattern, options = {}) =>
      * Registers a callback to be executed when a file is created, changed, or deleted.
      * 
      * @param {'create'|'change'|'delete'} event
-     * @param {FileWatcherCallback} callback
+     * @param {FileWatcher.Callback} callback
      */
     on: (event, callback) =>
     {
-      watchers[event].push({ callback, invoked: 0 });
+      watchers[event].push({ callback, lastInvoked: 0 });
     },
 
     /**

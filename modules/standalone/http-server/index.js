@@ -1,8 +1,8 @@
 /**
  * ?
  * 
- * @param {IHttpServerAdapter} adapter
- * @param {Partial<HttpServerOptions>} options
+ * @param {HttpServer.Adapter} adapter
+ * @param {Partial<HttpServer.Options>} options
  */
 export const makeHttpServer = (adapter, options = {}) =>
 {
@@ -33,7 +33,7 @@ export const makeHttpServer = (adapter, options = {}) =>
     /**
      * ?
      * 
-     * @param {HttpServerMiddleware[]} middlewares
+     * @param {HttpServer.Middleware[]} middlewares
      */
     registerMiddlewares: (middlewares) =>
     {
@@ -43,7 +43,7 @@ export const makeHttpServer = (adapter, options = {}) =>
     /**
      * ?
      * 
-     * @param {HttpServerRoute[]} routes
+     * @param {HttpServer.Route[]} routes
      */
     registerRoutes: (routes) =>
     {
