@@ -1,14 +1,22 @@
 import { parseSelector } from '../helpers'
-import { handleClassSelector } from './selectors/identifiers'
-import { handleUniqueSelector } from './selectors/identifiers'
+import { handleIdentifierSelector } from './selectors/identifiers'
+import { handleRelationshipSelector } from './selectors/relationships'
 
 /**
  * ?
  */
 const selectorHandlers =
 {
-  'class': [handleClassSelector, ['selector', 'name']],
-  'unique': [handleUniqueSelector, ['selector', 'name']]
+  // identifiers
+
+  'class': [handleIdentifierSelector, ['selector', 'name']],
+  'unique': [handleIdentifierSelector, ['selector', 'name']],
+
+  // relationships
+
+  'child': [handleRelationshipSelector, ['selector', 'type', 'name']],
+  'sibling': [handleRelationshipSelector, ['selector', 'type', 'name']],
+  'adjacent': [handleRelationshipSelector, ['selector', 'type', 'name']]
 };
 
 /**

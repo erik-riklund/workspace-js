@@ -1,5 +1,3 @@
 {
-  "dependencies": [
-    "css-engine"
-  ]
+  "dependencies": [ "css-engine" ]
 }

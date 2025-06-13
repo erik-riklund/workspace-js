@@ -23,22 +23,32 @@ const declarativeCssPlugin =
 
   handler: (block) =>
   {
-    block.setSelectors(
-      handleSelectors(block.getSelectors())
-    );
+    try
+    {
+      block.setSelectors(
+        handleSelectors(block.getSelectors())
+      );
 
-    block.handleRawProperties(
-      (content) =>
-      {
-        const properties = handleProperty(content);
-
-        if (Array.isArray(properties))
+      block.handleRawProperties(
+        (content) =>
         {
-          properties.forEach(
-            ({ key, value }) => block.setProperty(key, value)
-          );
+          const properties = handleProperty(content);
+
+          if (Array.isArray(properties))
+          {
+            for (const { key, value } of properties)
+            {
+              block.setProperty(key, value);
+            }
+          }
         }
-      }
-    );
+      );
+    }
+    catch (error)
+    {
+      throw new Error(
+        `${error.message} (line ${block.metadata.line})`
+      );
+    }
   }
 }

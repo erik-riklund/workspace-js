@@ -96,8 +96,17 @@ const handleLine = (state) =>
   }
   else
   {
-    state.buffer.push(currentLine);
+    if (currentLine.endsWith('{'))
+    {
+      state.buffer.push(currentLine.slice(0, -1).trim());
 
-    handleProperty(state);
+      handleOpeningBrace(state);
+    }
+    else
+    {
+      state.buffer.push(currentLine);
+
+      handleProperty(state);
+    }
   }
 }

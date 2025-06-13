@@ -13,7 +13,7 @@ export const handleOpeningBrace = (state) =>
   /** @type {CssEngine.Block} */
   const block = {
     selectors: state.buffer.map(line => line.replace(/,$/, '')),
-    metadata: { line: state.currentLineIndex }
+    metadata: { line: state.currentLineIndex + 1 }
   };
 
   // Depending on whether this is a root-level block or a nested block, we either add it

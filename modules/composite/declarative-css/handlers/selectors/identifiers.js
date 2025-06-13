@@ -1,33 +1,14 @@
 /**
- * ?
+ * Handles `class *` and `unique *` selectors.
  * 
  * @param {Record<string, string>} input
  */
-export const handleClassSelector = ({ name }) =>
+export const handleIdentifierSelector = ({ selector, name }) =>
 {
   if (!name)
   {
-    //
-
-    throw new Error('Invalid class selector (missing name)');
+    throw new Error(`Invalid \`${selector}\` selector (missing name)`);
   }
 
-  return `&.${name}`;
-}
-
-/**
- * ?
- * 
- * @param {Record<string, string>} input
- */
-export const handleUniqueSelector = ({ name }) =>
-{
-  if (!name)
-  {
-    //
-
-    throw new Error('Invalid class selector (missing name)');
-  }
-
-  return `&#${name}`;
+  return `&${(selector === 'class' ? '.' : '#') + name}`;
 }
