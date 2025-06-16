@@ -1,22 +1,93 @@
 import { parseSelector } from '../helpers'
-import { handleIdentifierSelector } from './selectors/identifiers'
-import { handleRelationshipSelector } from './selectors/relationships'
+
+import { handleGroupIdentifierSelector } from './selectors/identifiers'
+import { handleUniqueIdentifierSelector } from './selectors/identifiers'
+
+import { handleAttributeSelector } from './selectors/attributes'
+import { handleAttributeIsMissingSelector } from './selectors/attributes'
+import { handleAttributeIsValueSelector } from './selectors/attributes'
+import { handleAttributeIsNotValueSelector } from './selectors/attributes'
+
+import { handleChildElementRelationshipSelector } from './selectors/relationships'
+import { handleChildGroupRelationshipSelector } from './selectors/relationships'
+import { handleSiblingElementRelationshipSelector } from './selectors/relationships'
+import { handleSiblingGroupRelationshipSelector } from './selectors/relationships'
+import { handleAdjacentElementRelationshipSelector } from './selectors/relationships'
+import { handleAdjacentGroupRelationshipSelector } from './selectors/relationships'
+import { handleDescendantElementRelationshipSelector } from './selectors/relationships'
+import { handleDescendantGroupRelationshipSelector } from './selectors/relationships'
+
+import { handleStateSelector } from './selectors/state'
+import { handleNegatedStateSelector } from './selectors/state'
 
 /**
  * ?
+ * 
+ * @type {Record<string, [(segments: Record<string, string>)=>string, string[]]>}
  */
-const selectorHandlers =
+const selectorMap =
 {
-  // identifiers
+  // ?
 
-  'class': [handleIdentifierSelector, ['selector', 'name']],
-  'unique': [handleIdentifierSelector, ['selector', 'name']],
+  'group **': [
+    handleGroupIdentifierSelector, ['name']
+  ],
+  'unique **': [
+    handleUniqueIdentifierSelector, ['name']
+  ],
 
-  // relationships
+  // ?
 
-  'child': [handleRelationshipSelector, ['selector', 'type', 'name']],
-  'sibling': [handleRelationshipSelector, ['selector', 'type', 'name']],
-  'adjacent': [handleRelationshipSelector, ['selector', 'type', 'name']]
+  'attribute *': [
+    handleAttributeSelector, ['name']
+  ],
+  'attribute * is missing': [
+    handleAttributeIsMissingSelector, ['name']
+  ],
+  'attribute * is **': [
+    handleAttributeIsValueSelector, ['name', 'value']
+  ],
+  'attribute * is not **': [
+    handleAttributeIsNotValueSelector, ['name', 'value']
+  ],
+
+  // ?
+
+  'child *': [
+    handleChildElementRelationshipSelector, ['name']
+  ],
+  'child group **': [
+    handleChildGroupRelationshipSelector, ['name']
+  ],
+  'sibling *': [
+    handleSiblingElementRelationshipSelector, ['name']
+  ],
+  'sibling group **': [
+    handleSiblingGroupRelationshipSelector, ['name']
+  ],
+  'adjacent *': [
+    handleAdjacentElementRelationshipSelector, ['name']
+  ],
+  'adjacent group **': [
+    handleAdjacentGroupRelationshipSelector, ['name']
+  ],
+  'descendant *': [
+    handleDescendantElementRelationshipSelector, ['name']
+  ],
+  'descendant group **': [
+    handleDescendantGroupRelationshipSelector, ['name']
+  ],
+
+  // ?
+
+  'state is **': [
+    handleStateSelector, ['state']
+  ],
+  'state is not **': [
+    handleNegatedStateSelector, ['state']
+  ],
+
+  // ?
 };
 
 /**
@@ -31,17 +102,16 @@ export const handleSelectors = (selectors) =>
 
   for (const selector of selectors)
   {
-    const prefix = selector.slice(0, selector.indexOf(' '));
-
-    if (selectorHandlers[prefix])
+    for (const [pattern, [handler, labels]] of Object.entries(selectorMap))
     {
-      const parsedSelector = parseSelector(
-        selectorHandlers[prefix][1], selector
-      );
+      const parsedSelector = parseSelector(pattern, labels, selector);
 
-      result = result.concat(
-        selectorHandlers[prefix][0](parsedSelector)
-      );
+      if (parsedSelector)
+      {
+        result.push(handler(parsedSelector));
+
+        break; // move on to the next selector.
+      }
     }
   }
 

@@ -20,7 +20,8 @@ export const renderTreeToString = (tree) =>
 
   for (const [context, content] of Object.entries(state.output))
   {
-    output += context === 'root' ? content.join('') : `${ context }{${ content.join('') }}`;
+    output += (context === 'root')
+      ? content.join('') : `${context}{${content.join('')}}`;
   }
 
   return output;
@@ -68,7 +69,7 @@ const renderBlock = (context, block, state, parent = '') =>
       }
 
       state.output[context].push(
-        `${ parent }{${ renderProperties(block.properties) }}`
+        `${parent}{${renderProperties(block.properties)}}`
       );
     }
   }
@@ -80,18 +81,23 @@ const renderBlock = (context, block, state, parent = '') =>
 
       if (selector.startsWith('&'))
       {
-        block.selectors[i] = `${ parent }${ selector.slice(1) }`;
+        block.selectors[i] = parent + selector.slice(1);
+      }
+      else if (selector.endsWith('&'))
+      {
+        block.selectors[i] = selector.slice(0, -1) + parent;
       }
       else
       {
-        block.selectors[i] = parent ? `${ parent } ${ selector }` : selector;
+        block.selectors[i] = (parent.length > 0)
+          ? `${parent} ${selector}` : selector;
       }
     }
 
     if (block.properties?.length > 0)
     {
       state.output[context].push(
-        `${ block.selectors.join(',') }{${ renderProperties(block.properties) }}`
+        `${block.selectors.join(',')}{${renderProperties(block.properties)}}`
       );
     }
   }
@@ -164,7 +170,7 @@ const appendMediaQueryToContext = (context, mediaQuery) =>
 {
   if (context.startsWith('@media '))
   {
-    return `${ context }and${ mediaQuery.replace(/^@media\s+/, '') }`;
+    return `${context}and${mediaQuery.replace(/^@media\s+/, '')}`;
   }
 
   return mediaQuery;
@@ -183,7 +189,7 @@ const renderProperties = (properties = []) =>
     {
       if (!property.key.startsWith('!'))
       {
-        renderedProperties.push(`${ property.key }:${ property.value }`);
+        renderedProperties.push(`${property.key}:${property.value}`);
       }
     }
   }

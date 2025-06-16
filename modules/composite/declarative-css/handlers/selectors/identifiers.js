@@ -1,14 +1,13 @@
 /**
- * Handles `class *` and `unique *` selectors.
+ * Handles `group *` selectors.
  * 
  * @param {Record<string, string>} input
  */
-export const handleIdentifierSelector = ({ selector, name }) =>
-{
-  if (!name)
-  {
-    throw new Error(`Invalid \`${selector}\` selector (missing name)`);
-  }
+export const handleGroupIdentifierSelector = ({ name }) => `&.${name}`;
 
-  return `&${(selector === 'class' ? '.' : '#') + name}`;
-}
+/**
+ * Handles `unique *` selectors.
+ * 
+ * @param {Record<string, string>} input
+ */
+export const handleUniqueIdentifierSelector = ({ name }) => `&#${name}`;

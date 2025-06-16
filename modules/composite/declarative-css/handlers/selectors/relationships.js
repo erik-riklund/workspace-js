@@ -1,25 +1,63 @@
 /**
- * The combinators for `child`, `sibling` and `adjacent` selectors.
- */
-const combinators = { child: '>', sibling: '+', adjacent: '~' };
-
-/**
- * Handles `child *`, `sibling *` and `adjacent *` selectors.
+ * Handles `child *` selectors.
  * 
  * @param {Record<string, string>} input
  */
-export const handleRelationshipSelector = ({ selector, type, name }) =>
-{
-  const prefix = type === 'class' ? '.' : '';
+export const handleChildElementRelationshipSelector =
+  ({ name }) => `&>${name}`;
 
-  if ((!prefix && !type) || (prefix && !name))
-  {
-    const targetType = type === 'class' ? 'class' : 'element';
+/**
+ * Handles `child group **` selectors.
+ * 
+ * @param {Record<string, string>} input
+ */
+export const handleChildGroupRelationshipSelector =
+  ({ name }) => `&>.${name.replace(/ /g, '-')}`;
 
-    throw new Error(
-      `Invalid \`${selector}\` selector (missing ${targetType} name)`
-    );
-  }
+/**
+ * Handles `sibling *` selectors.
+ * 
+ * @param {Record<string, string>} input
+ */
+export const handleSiblingElementRelationshipSelector =
+  ({ name }) => `&~${name}`;
 
-  return `&${combinators[selector] + prefix + (name || type)}`;
-}
+/**
+ * Handles `sibling group **` selectors.
+ * 
+ * @param {Record<string, string>} input
+ */
+export const handleSiblingGroupRelationshipSelector =
+  ({ name }) => `&~.${name.replace(/ /g, '-')}`;
+
+/**
+ * Handles `adjacent *` selectors.
+ * 
+ * @param {Record<string, string>} input
+ */
+export const handleAdjacentElementRelationshipSelector =
+  ({ name }) => `&+${name}`;
+
+/**
+ * Handles `adjacent group **` selectors.
+ * 
+ * @param {Record<string, string>} input
+ */
+export const handleAdjacentGroupRelationshipSelector =
+  ({ name }) => `&+.${name.replace(/ /g, '-')}`;
+
+/**
+ * Handles `descendant *` selectors.
+ * 
+ * @param {Record<string, string>} input
+ */
+export const handleDescendantElementRelationshipSelector =
+  ({ name }) => `& ${name}`;
+
+/**
+ * Handles `descendant group **` selectors.
+ * 
+ * @param {Record<string, string>} input
+ */
+export const handleDescendantGroupRelationshipSelector =
+  ({ name }) => `& .${name.replace(/ /g, '-')}`;

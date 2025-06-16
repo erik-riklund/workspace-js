@@ -1,65 +1,53 @@
-const SPACE = ' ';
+/**
+ * Stores compiled regular expressions to avoid recompilation.
+ * 
+ * @type {Record<string, RegExp>}
+ */
+const compiledPatterns = {};
 
 /**
- * Parses a selector string into an object where keys are labels and values
- * are corresponding segments from the selector. Segments in the selector are
- * separated by spaces, unless enclosed in single quotes.
+ * Parses a CSS selector string based on a given pattern and extracts labeled values.
  * 
+ * @param {string} pattern
  * @param {string[]} labels
  * @param {string} selector
  * 
- * @returns {Record<string, string>}
+ * @returns {MaybeNull<Record<string, string>>}
  */
-export const parseSelector = (labels, selector) =>
+export const parseSelector = (pattern, labels, selector) =>
 {
-  const segments = [];
-  let currentSegmentIndex = 0;
-  let isQuotedValue = false;
-
-  for (let i = 0; i < selector.length; i++)
+  if (!(pattern in compiledPatterns))
   {
-    if (typeof segments[currentSegmentIndex] !== 'string')
-    {
-      segments[currentSegmentIndex] = '';
-    }
-
-    const currentCharacter = selector[i];
-    const currentSegment = segments[currentSegmentIndex];
-
-    if (!isQuotedValue && currentCharacter === SPACE)
-    {
-      if (!currentSegment.trim())
-      {
-        // The current segment is empty (or white-space only).
-        // We ignore the current space character and move on to the next iteration.
-
-        continue;
-      }
-
-      currentSegmentIndex++;
-    }
-    else
-    {
-      if (currentCharacter === "'")
-      {
-        isQuotedValue = !isQuotedValue;
-      }
-      else
-      {
-        segments[currentSegmentIndex] += currentCharacter;
-      }
-    }
+    compiledPatterns[pattern] = compilePattern(pattern);
   }
 
-  if (currentSegmentIndex + 1 > labels.length)
-  {
-    // The selector contains more segments than there are labels provided.
-    // This indicates an invalid selector format for the given labels.
+  const expression = compiledPatterns[pattern];
+  const matches = expression.exec(selector);
 
-    throw new Error(`Recieved more values than labels (${labels.join(', ')}).`);
+  if (matches)
+  {
+    return Object.fromEntries(
+      labels.map((label, index) => [label, matches[index + 1]])
+    );
   }
 
-  return Object.fromEntries(
-    labels.map((label, index) => [label, segments[index]])
-  );
+  return null;
 }
+
+/**
+ * Compiles a pattern string into a regular expression.
+ * 
+ * - `*` is replaced with a regular expression that matches a single word.
+ * - `**` is replaced with a regular expression that matches a string wrapped in quotes.
+ * 
+ * @param {string} pattern
+ * @returns {RegExp}
+ */
+const compilePattern = (pattern) =>
+{
+  const compiledPattern = pattern
+    .replace(/\*\*/g, '[\'"]([\\w\\s-]+)[\'"]')
+    .replace(/\*/g, '[\'"]?([\\w-]+)[\'"]?');
+
+  return new RegExp(`^${compiledPattern}$`);
+};

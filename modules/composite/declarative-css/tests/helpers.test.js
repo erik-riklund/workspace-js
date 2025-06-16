@@ -1,38 +1,68 @@
 import { it, expect } from 'bun:test'
 import { parseSelector } from '../helpers'
 
-// ----- parseSelector --------------------
-
-it('should parse a basic selector',
+it('should parse a selector with a single label',
   () =>
   {
-    const selector = 'selector-name first second';
-    const result = parseSelector(['foo', 'bar', 'foobar'], selector);
-
-    expect(result).toEqual(
-      { foo: 'selector-name', bar: 'first', foobar: 'second' }
+    const result = parseSelector(
+      'group *', ['name'], 'group foo'
     );
+
+    expect(result).toEqual({ name: 'foo' });
   }
 );
 
-it('should parse a selector with a quoted value',
+it('should parse a selector with a single label wrapped in single quotes',
   () =>
   {
-    const selector = 'selector-name first \'second and third\'';
-    const result = parseSelector(['foo', 'bar', 'foobar'], selector);
-
-    expect(result).toEqual(
-      { foo: 'selector-name', bar: 'first', foobar: 'second and third' }
+    const result = parseSelector(
+      'group *', ['name'], 'group \'foo\''
     );
+
+    expect(result).toEqual({ name: 'foo' });
   }
 );
 
-it('should throw an error when there are more values than labels',
+it('should parse a selector with a single label wrapped in double quotes',
   () =>
   {
-    const selector = 'selector-name first second';
-    const result = () => parseSelector(['foo', 'bar'], selector);
+    const result = parseSelector(
+      'group *', ['name'], 'group "foo"'
+    );
 
-    expect(result).toThrowError('Recieved more values than labels');
+    expect(result).toEqual({ name: 'foo' });
+  }
+);
+
+it('should parse a selector with multiple labels',
+  () =>
+  {
+    const result = parseSelector(
+      'group * is *', ['name', 'value'], 'group foo is bar'
+    );
+
+    expect(result).toEqual({ name: 'foo', value: 'bar' });
+  }
+);
+
+it('should parse a selector with a label containing spaces (single quotes)',
+  () =>
+  {
+    const result = parseSelector(
+      'group * is **', ['name','value'], "group foo is 'foo bar'"
+    );
+
+    expect(result).toEqual({ name: 'foo', value: 'foo bar' });
+  }
+);
+
+it('should parse a selector with a label containing spaces (double quotes)',
+  () =>
+  {
+    const result = parseSelector(
+      'group * is **', ['name','value'], 'group foo is "foo bar"'
+    );
+
+    expect(result).toEqual({ name: 'foo', value: 'foo bar' });
   }
 );
