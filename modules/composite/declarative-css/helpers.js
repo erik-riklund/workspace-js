@@ -6,7 +6,7 @@
 const compiledPatterns = {};
 
 /**
- * Parses a CSS selector string based on a given pattern and extracts labeled values.
+ * Parses a CSS selector string based on the given pattern to extract labeled values.
  * 
  * @param {string} pattern
  * @param {string[]} labels
@@ -18,7 +18,7 @@ export const parseSelector = (pattern, labels, selector) =>
 {
   if (!(pattern in compiledPatterns))
   {
-    compiledPatterns[pattern] = compilePattern(pattern);
+    compiledPatterns[pattern] = compileSelectorPattern(pattern);
   }
 
   const expression = compiledPatterns[pattern];
@@ -43,11 +43,56 @@ export const parseSelector = (pattern, labels, selector) =>
  * @param {string} pattern
  * @returns {RegExp}
  */
-const compilePattern = (pattern) =>
+const compileSelectorPattern = (pattern) =>
 {
+  /**
+   * Replaces `{groups}` with a regular expression that matches
+   * any of the specified groups.
+   * 
+   * @param {string} _input
+   * @param {string} groups
+   */
+  const handleGroup = (_input, groups) => 
+  {
+    return `(${groups.replace(/,/g, '|')})`;
+  }
+
+  /**
+   * Replaces `[groups]` with a regular expression that matches
+   * any of the specified groups, or nothing.
+   * 
+   * @param {string} _input
+   * @param {string} groups
+   */
+  const handleOptionalGroup = (_input, groups) =>
+  {
+    return `(?:\\s(${groups.replace(/,/g, '|')}))?`;
+  }
+
   const compiledPattern = pattern
-    .replace(/\*\*/g, '[\'"]([\\w\\s-]+)[\'"]')
-    .replace(/\*/g, '[\'"]?([\\w-]+)[\'"]?');
+    .replace(/\{([^}]+)}/g, handleGroup)
+    .replace(/\s\[([^\]]+)]/g, handleOptionalGroup)
+    .replace(/\*\*/g, '"([\\w\\s-]+)"')
+    .replace(/\s\*\?/g, '(?:\\s`([\\w\\s-]+)`)?')
+    .replace(/\*/g, '`([\\w\\s-]+)`');
 
   return new RegExp(`^${compiledPattern}$`);
 };
+
+/**
+ * Returns the lower and upper breakpoints for the given device.
+ * 
+ * @param {string} device
+ * @return {{ lower: string, upper: string }}
+ */
+export const getDeviceSize = (device) =>
+{
+  const breakpoints = {
+    mobile: { lower: null, upper: '575px' },
+    tablet: { lower: '576px', upper: '959px' },
+    laptop: { lower: '960px', upper: '1439px' },
+    desktop: { lower: '1440px', upper: null }
+  };
+
+  return breakpoints[device];
+}

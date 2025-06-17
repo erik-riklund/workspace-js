@@ -4,65 +4,90 @@ import { parseSelector } from '../helpers'
 it('should parse a selector with a single label',
   () =>
   {
-    const result = parseSelector(
-      'group *', ['name'], 'group foo'
-    );
+    const pattern = 'group *';
+    const labels = ['name'];
+    const selector = 'group `foo`';
+
+    const result = parseSelector(pattern, labels, selector);
 
     expect(result).toEqual({ name: 'foo' });
   }
 );
 
-it('should parse a selector with a single label wrapped in single quotes',
+it('should parse a selector with a single string value',
   () =>
   {
-    const result = parseSelector(
-      'group *', ['name'], 'group \'foo\''
-    );
+    const pattern = 'group **';
+    const labels = ['name'];
+    const selector = 'group "foo"';
+
+    const result = parseSelector(pattern, labels, selector);
 
     expect(result).toEqual({ name: 'foo' });
   }
 );
 
-it('should parse a selector with a single label wrapped in double quotes',
+it('should parse a selector with a keyword and a single label',
   () =>
   {
-    const result = parseSelector(
-      'group *', ['name'], 'group "foo"'
-    );
+    const pattern = 'group {is,is not} *';
+    const labels = ['keyword', 'name'];
+    const selector = 'group is `foo`';
 
-    expect(result).toEqual({ name: 'foo' });
+    const result = parseSelector(pattern, labels, selector);
+
+    expect(result).toEqual({ keyword: 'is', name: 'foo' });
   }
 );
 
-it('should parse a selector with multiple labels',
+it('should parse a selector with a label and an optional keyword',
   () =>
   {
-    const result = parseSelector(
-      'group * is *', ['name', 'value'], 'group foo is bar'
-    );
+    const pattern = 'attribute * [is missing]';
+    const labels = ['name', 'keyword'];
+    const selector = 'attribute `foo` is missing';
 
-    expect(result).toEqual({ name: 'foo', value: 'bar' });
+    const result = parseSelector(pattern, labels, selector);
+
+    expect(result).toEqual({ name: 'foo', keyword: 'is missing' });
   }
 );
 
-it('should parse a selector with a label containing spaces (single quotes)',
+it('should parse a selector with a label and an optional keyword (absence)',
   () =>
   {
-    const result = parseSelector(
-      'group * is **', ['name','value'], "group foo is 'foo bar'"
-    );
+    const pattern = 'attribute * [is missing]';
+    const labels = ['name', 'keyword'];
+    const selector = 'attribute `foo`';
 
-    expect(result).toEqual({ name: 'foo', value: 'foo bar' });
+    const result = parseSelector(pattern, labels, selector);
+
+    expect(result).toEqual({ name: 'foo', keyword: undefined });
   }
 );
 
-it('should parse a selector with a label containing spaces (double quotes)',
+it('should parse a selector with an optional label',
   () =>
   {
-    const result = parseSelector(
-      'group * is **', ['name','value'], 'group foo is "foo bar"'
-    );
+    const pattern = 'selector *? .. *';
+    const labels = ['modifier', 'name'];
+    const selector = 'selector `foo` .. `bar`';
 
-    expect(result).toEqual({ name: 'foo', value: 'foo bar' });
+    const result = parseSelector(pattern, labels, selector);
+
+    expect(result).toEqual({ modifier: 'foo', name: 'bar' });
+  }
+);
+
+it('should parse a selector with an optional label (absence)',
+  () =>
+  {
+    const pattern = 'selector *? .. *';
+    const labels = ['modifier', 'name'];
+    const selector = 'selector .. `bar`';
+
+    const result = parseSelector(pattern, labels, selector);
+
+    expect(result).toEqual({ modifier: undefined, name: 'bar' });
   }
 );

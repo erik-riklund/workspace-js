@@ -1,4 +1,4 @@
-### Proposed readable syntax
+### Declarative syntax
 ```
 base
 {
@@ -6,29 +6,29 @@ base
   set font-family to sans-serif
 }
 
-group 'large text'
+group `large text`
 {
   set font-size to 2rem
 }
 
-input
+div
 {
-  attribute name
+  device `laptop`
   {
 
   }
 
-  attribute name is missing
-  {
-    
-  }
-
-  attribute type is 'text'
+  device .. `tablet`
   {
 
   }
 
-  attribute type is not 'text'
+  device `tablet` .. `laptop`
+  {
+
+  }
+
+  device `tablet` ..
   {
 
   }

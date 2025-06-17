@@ -1,6 +1,6 @@
 import { makeEngine } from 'module/css-engine'
-import { handleProperty } from './handlers/property'
-import { handleSelectors } from './handlers/selector'
+import { handleProperty } from './property'
+import { handleSelectors } from './selector'
 
 /**
  * Creates a CSS engine that supports declarative CSS syntax.
