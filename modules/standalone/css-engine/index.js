@@ -1,6 +1,6 @@
-import { createTreeFromString } from './parser'
-import { transformTree } from './transformer'
-import { renderTreeToString } from './renderer'
+import { createTreeFromString } from './modules/parser'
+import { transformTree } from './modules/transformer'
+import { renderTreeToString } from './modules/renderer'
 
 /**
  * Creates a new engine function that uses the provided plugins to perform

@@ -1,4 +1,6 @@
 import { makeEngine } from 'module/css-engine'
+import { reusable } from 'module/css-engine/plugins/reusable'
+
 import { handleProperty } from './property'
 import { handleSelectors } from './selector'
 
@@ -9,7 +11,14 @@ import { handleSelectors } from './selector'
  */
 export const createDeclarativeEngine = (plugins = []) =>
 {
-  return makeEngine([declarativeCssPlugin, ...plugins]);
+  return makeEngine(
+    [
+      ...reusable({}),
+      declarativeCssPlugin,
+
+      ...plugins
+    ]
+  );
 }
 
 /**

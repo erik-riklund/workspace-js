@@ -1,5 +1,5 @@
-import { makeMutableBlock } from './transformer'
-import { makeParserState } from './parser'
+import { makeMutableBlock } from './modules/transformer'
+import { makeParserState } from './modules/parser'
 
 declare global
 {

@@ -1,4 +1,4 @@
-import { makeEngine } from '.'
+import { makeEngine } from '..'
 import { it, expect } from 'bun:test'
 
 it('should transform properties that use standard CSS syntax',
