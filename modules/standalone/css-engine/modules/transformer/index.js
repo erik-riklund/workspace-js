@@ -45,11 +45,6 @@ export const makeMutableBlock = (block) =>
      */
     setSelectors: (newSelectors) =>
     {
-      if (newSelectors.some(selector => typeof selector !== 'string'))
-      {
-        throw new Error('Selectors must be strings');
-      }
-
       block.selectors = [...newSelectors];
     },
 

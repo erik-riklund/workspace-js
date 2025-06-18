@@ -104,6 +104,8 @@ export const handleSelectors = (selectors) =>
 
   for (const selector of selectors)
   {
+    let done = false;
+
     for (const [pattern, [handler, labels]] of Object.entries(selectorMap))
     {
       const parsedSelector = parseSelector(pattern, labels, selector);
@@ -112,8 +114,14 @@ export const handleSelectors = (selectors) =>
       {
         result.push(handler(parsedSelector));
 
+        done = true;
         break; // move on to the next selector.
       }
+    }
+
+    if (!done)
+    {
+      result.push(selector);
     }
   }
 

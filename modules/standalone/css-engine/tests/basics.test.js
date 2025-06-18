@@ -7,7 +7,7 @@ it('should return a minified version of the input',
   () => expect(engine('h1 { color: red; }')).toBe('h1{color:red}')
 );
 
-it.todo('should return a flattened version of the input',
+it('should return a flattened version of the input',
   () =>
   {
     const input = 'form { & input { color: red; } & button { color: blue; &:hover { color: pink; } } }';

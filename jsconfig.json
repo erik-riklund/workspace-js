@@ -4,8 +4,10 @@
     "allowJs": true,
     "checkJs": true,
     "skipLibCheck": false,
-    "baseUrl": "./",
+    "moduleResolution": "bundler",
+    "target": "ESNext",
 
+    "baseUrl": "./",
     "paths":
     {
       "module/*": [
