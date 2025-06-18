@@ -1,6 +1,4 @@
-import { handleClosingBrace } from './handlers/closing-brace'
-import { handleOpeningBrace } from './handlers/opening-brace'
-import { handleProperty } from './handlers/property'
+import { delimiterHandlers as d } from './delimiters'
 
 /**
  * ?
@@ -10,103 +8,122 @@ import { handleProperty } from './handlers/property'
  */
 export const createTreeFromString = (input) =>
 {
-  const state = makeParserState(
-    input.split(/\r?\n/).map((line) => line.trim())
-  );
+  const state = makeParserState();
 
-  try
+  while (state.currentPosition < input.length)
   {
-    while (typeof state.currentLine === 'string')
-    {
-      handleLine(state);
+    const currentCharacter = input[state.currentPosition];
 
-      state.currentLineIndex++;
+    switch (currentCharacter)
+    {
+      case '{': d.handleOpeningBrace(state); break;
+      case '}': d.handleClosingBrace(state); break;
+
+      case '@': d.handleAtSign(state); break;
+      case '&': d.handleAmpersand(state); break;
+      case ',': d.handleComma(state); break;
+      case ':': d.handleColon(state); break;
+      case ';': d.handleSemicolon(state); break;
+      case '"': d.handleDoubleQuote(state); break;
+
+      default: state.buffer += currentCharacter;
     }
 
-    if (state.currentBlock)
-    {
-      throw new Error('Unexpected end of string (missing closing brace)');
-    }
+    state.currentLine += (currentCharacter === '\n') ? 1 : 0;
+    state.currentColumn = (currentCharacter === '\n') ? 1 : state.currentColumn + 1;
 
-    return state.tree;
+    state.currentPosition++;
   }
-  catch (error)
+
+  if (state.stack.length > 0)
   {
-    throw new Error(
-      `css-engine: ${error.message} @ line ${state.currentLineIndex + 1}`
+    throw new ParsingError(
+      'Unexpected end of string (missing closing brace)', state
     );
   }
+
+  return state.tree;
 }
 
 /**
  * ?
- * 
- * @param {string[]} lines
  */
-export const makeParserState = (lines) =>
+export const makeParserState = () =>
 {
   return {
-    tree: [],
-    stack: [],
-    buffer: [],
-
-    currentLineIndex: 0,
-
-    get currentLine ()
-    {
-      return lines[this.currentLineIndex] || null;
-    },
-
-    get nextLine ()
-    {
-      return lines[this.currentLineIndex + 1] || null;
-    },
-
-    get previousLine ()
-    {
-      return lines[this.currentLineIndex - 1] || null;
-    },
+    /**
+     * The buffer holds the characters that are currently being parsed.
+     */
+    buffer: '',
 
     /**
-     * @returns {MaybeNull<CssEngine.Block>}
+     * Holds the root of the abstract tree, which is an array of blocks.
+     * Each block contains selectors, properties, and potentially nested blocks.
+     * 
+     * @type {CssEngine.AbstractTree}
      */
-    get currentBlock ()
-    {
-      return this.stack[this.stack.length - 1] || null;
-    }
+    tree: [],
+
+    /**
+     * Holds the stack of blocks that are currently being parsed.
+     * The stack maintains the hierarchy of nested blocks.
+     * 
+     * @type {CssEngine.Block[]}
+     */
+    stack: [],
+
+    /**
+     * Tracks the current position in the input string.
+     */
+    currentPosition: 0,
+
+    /**
+     * Tracks the current line in the input string.
+     */
+    currentLine: 1,
+
+    /**
+     * Tracks the current column in the input string.
+     */
+    currentColumn: 1,
+
+    /**
+     * Tracks the name of the property that is currently being parsed.
+     */
+    currentPropertyName: '',
+
+    /**
+     * Indicates whether an at-rule is currently being parsed.
+     */
+    isAtRule: false,
+
+    /**
+     * Indicates whether a nested selector is currently being parsed.
+     */
+    isNestedSelector: false,
+
+    /**
+     * Indicates whether a string literal is currently being parsed.
+     */
+    isStringLiteral: false
   }
 }
 
 /**
  * ?
- * 
- * @param {CssEngine.ParserState} state
  */
-const handleLine = (state) =>
+export class ParsingError extends Error
 {
-  const currentLine = state.currentLine;
-
-  if (currentLine === '{')
+  /**
+   * ?
+   * 
+   * @param {string} message
+   * @param {CssEngine.ParserState} state
+   */
+  constructor(message, state)
   {
-    handleOpeningBrace(state);
-  }
-  else if (currentLine === '}')
-  {
-    handleClosingBrace(state);
-  }
-  else
-  {
-    if (currentLine.endsWith('{'))
-    {
-      state.buffer.push(currentLine.slice(0, -1).trim());
+    super(`Parsing error: ${message} @ line ${state.currentLine} (column ${state.currentColumn}).`);
 
-      handleOpeningBrace(state);
-    }
-    else
-    {
-      state.buffer.push(currentLine);
-
-      handleProperty(state);
-    }
+    this.name = 'ParsingError';
   }
 }
