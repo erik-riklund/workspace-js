@@ -1,5 +1,5 @@
 import { it, expect } from 'bun:test'
-import { handleSelectors } from '../selector'
+import { handleSelectors } from '../plugins/selectors'
 
 // ----- handleAttributeSelector ---------------
 
@@ -62,6 +62,18 @@ it('should transform an `attribute * is not **` selector (with spaces)',
     const result = handleSelectors([input]);
 
     expect(result).toEqual(['&:not([test="value with spaces"])']);
+  }
+);
+
+// ----- handleBaseSelector ---------------
+
+it('should transform a `base` selector',
+  () =>
+  {
+    const input = 'base';
+    const result = handleSelectors([input]);
+
+    expect(result).toEqual([':root']);
   }
 );
 

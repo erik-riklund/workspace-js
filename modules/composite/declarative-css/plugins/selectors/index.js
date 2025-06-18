@@ -1,5 +1,5 @@
+import * as s from './handlers'
 import { parseSelector } from './helpers'
-import * as s from './handlers/selectors'
 
 /**
  * ?
@@ -8,15 +8,8 @@ import * as s from './handlers/selectors'
  */
 const selectorMap =
 {
-  // Identifier selectors are classes and unique identifiers.
-  // We call them 'group' and 'unique' selectors to use natural, non-technical language.
-
-  '{group,unique} *': [
-    s.handleIdentifierSelector, ['selector', 'name']
-  ],
-
-  // Attribute selectors can be used to match elements by attributes,
-  // either by presence or based on values.
+  // Attribute selectors can be used to apply styles based on
+  // the presence or value of attributes.
 
   'attribute * [is missing]': [
     s.handleAttributeSelector, ['name', 'keyword']
@@ -25,14 +18,17 @@ const selectorMap =
     s.handleAttributeValueSelector, ['name', 'keyword', 'value']
   ],
 
-  // Relationship selectors can be used to match elements by their relationship to other elements.
-  // They increase the specificity of the selector, reducing risk of collisions.
+  // The base selector can be used to match the root element.
+
+  'base': [s.handleBaseSelector, []],
+
+  // Relationship selectors can be used to match descendants of other elements.
 
   '{child,sibling,adjacent,descendant} {element,group} *': [
     s.handleRelationshipSelector, ['selector', 'type', 'name']
   ],
 
-  //
+  // Device selectors can be used to apply styles based on screen size.
 
   'device {mobile,tablet,laptop,desktop}': [
     s.handleDeviceSelector, ['device']
@@ -41,37 +37,60 @@ const selectorMap =
     s.handleDeviceRangeSelector, ['fromDevice', 'toDevice']
   ],
 
-  // The scope selector can be used to create a custom scope.
-  // This is useful for creating styles that only apply within a specific component.
+  // Identifier selectors are classes and unique identifiers.
 
-  'scope *': [
-    s.handleScopeSelector, ['name']
+  '{group,unique} *': [
+    s.handleIdentifierSelector, ['selector', 'name']
   ],
 
-  // State selectors can be used to match elements using group-based states.
-  //
-  // IMPORTANT: These should not be confused with pseudo-class selectors.
+  // The scope selector can be used to create styles that only
+  // apply within a specific context.
+
+  'scope *': [s.handleScopeSelector, ['name']],
+
+  // State selectors can be used to match elements using custom group-based states.
 
   'state {is,is not} *': [
     s.handleStateSelector, ['keyword', 'state']
   ],
 
-  // When selectors can be used to match elements using pseudo-classes. Some of the classes
-  // have readable aliases available, such as `focused within` instead of `focus-within` and
-  // `hovered` instead of `hover`.
-  //
-  // IMPORTANT: These should not be confused with group-based states.
+  // When selectors can be used to target pseudo-classes.
 
-  'when [not] *': [
-    s.handleWhenSelector, ['keyword', 'state']
-  ],
+  'when [not] *': [s.handleWhenSelector, ['keyword', 'state']],
 
-  // Context selectors can be used to match elements based on descendant elements or groups.
+  // Context selectors can be used to match elements based on
+  // the presence of descendant elements or groups.
 
   '{with,without} {child,sibling,adjacent,descendant} {element,group} *': [
     s.handleContextSelector, ['selector', 'relationship', 'type', 'name']
   ]
 };
+
+/**
+ * A plugin that transforms declarative CSS selectors into standard CSS.
+ * 
+ * @type {CssEngine.TransformPlugin}
+ */
+export const selectorsPlugin =
+{
+  stage: 'transform',
+
+  handler: (block) =>
+  {
+    try
+    {
+      const selectors = block.getSelectors();
+
+      block.setSelectors(handleSelectors(selectors));
+    }
+    catch (error)
+    {
+      throw new Error(
+        `${error.message} (line ${block.metadata.line})`
+      );
+    }
+  }
+}
 
 /**
  * ?

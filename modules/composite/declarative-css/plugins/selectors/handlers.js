@@ -1,4 +1,4 @@
-import { getDeviceSize } from '../helpers'
+import { getDeviceSize } from './helpers'
 
 /**
  * Handles `attribute *` and `attribute * is missing` selectors.
@@ -24,6 +24,11 @@ export const handleAttributeValueSelector = ({ name, keyword, value }) =>
 
   return (keyword === 'is') ? `&[${attribute}=${value}]` : `&:not([${attribute}=${value}])`;
 }
+
+/**
+ * ?
+ */
+export const handleBaseSelector = () => ':root';
 
 /**
  * Handles `with *` and `without *` selectors.
