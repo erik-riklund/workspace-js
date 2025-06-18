@@ -6,10 +6,10 @@ export class RenderingError extends Error
    */
   constructor(message, block)
   {
-    super(
-      `<CSS-engine> Rendering error:\n${message} @ line ${block.metadata.line}.`
-    );
-    
+    const { start } = block.metadata;
+
+    super(`Rendering error: ${message} @ line ${start.line} (column ${start.column}).`);
+
     this.name = 'RenderingError';
   }
 }

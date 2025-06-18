@@ -20,3 +20,7 @@ it('should throw an error when encountering an unexpected semicolon',
 it('should throw an error when encountering an unexpected semicolon (missing property value)',
   () => expect(() => createTreeFromString('div{color:;}')).toThrowError('Unexpected semicolon')
 );
+
+it('should throw an error when encountering an unexpected comma (missing selector)',
+  () => expect(() => createTreeFromString(',div,span{}')).toThrowError('Unexpected comma (expected selector)')
+);

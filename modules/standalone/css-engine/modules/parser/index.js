@@ -1,4 +1,4 @@
-import { delimiterHandlers as d } from './delimiters'
+import { delimiters as d } from './delimiters'
 
 /**
  * ?
@@ -18,12 +18,14 @@ export const createTreeFromString = (input) =>
     {
       case '{': d.handleOpeningBrace(state); break;
       case '}': d.handleClosingBrace(state); break;
-
-      case '@': d.handleAtSign(state); break;
-      case '&': d.handleAmpersand(state); break;
+      case '(': d.handleOpeningParenthesis(state); break;
+      case ')': d.handleClosingParenthesis(state); break;
+      
+      case ';': d.handleSemicolon(state); break;
       case ',': d.handleComma(state); break;
       case ':': d.handleColon(state); break;
-      case ';': d.handleSemicolon(state); break;
+      case '&': d.handleAmpersand(state); break;
+      case '@': d.handleAtSign(state); break;
       case '"': d.handleDoubleQuote(state); break;
 
       default: state.buffer += currentCharacter;
@@ -91,6 +93,18 @@ export const makeParserState = () =>
      * Tracks the name of the property that is currently being parsed.
      */
     currentPropertyName: '',
+
+    /**
+     * Tracks the current parenthesis level. Used when parsing selectors.
+     */
+    currentParenthesisLevel: 0,
+
+    /**
+     * Holds the selectors for the block that is currently being parsed.
+     * 
+     * @type {string[]}
+     */
+    selectorStack: [],
 
     /**
      * Indicates whether an at-rule is currently being parsed.

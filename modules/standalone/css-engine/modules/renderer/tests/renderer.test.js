@@ -233,7 +233,7 @@ it('should append a `prefers-color-scheme` media query to an active responsive m
     const tree = [
       {
         selectors: [
-          '@media screen and (min-width: 576px)'
+          '@media screen and(min-width:576px)'
         ],
         children: [
           {
@@ -242,7 +242,7 @@ it('should append a `prefers-color-scheme` media query to an active responsive m
             children: [
               {
                 selectors: [
-                  '@media (prefers-color-scheme: dark)'
+                  '@media(prefers-color-scheme:dark)'
                 ],
                 properties: [
                   { key: 'color', value: 'white'}
@@ -255,8 +255,8 @@ it('should append a `prefers-color-scheme` media query to an active responsive m
     ];
 
     expect(renderTreeToString(tree)).toEqual(
-      '@media screen and (min-width: 576px){h1{color:black}}' +
-      '@media screen and (min-width: 576px)and(prefers-color-scheme: dark){h1{color:white}}'
+      '@media screen and(min-width:576px){h1{color:black}}' +
+      '@media screen and(min-width:576px)and(prefers-color-scheme:dark){h1{color:white}}'
     );
   }
 );

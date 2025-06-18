@@ -12,6 +12,16 @@ it('should parse a pseudo-class selector',
   }
 );
 
+it('should parse a nested pseudo-class selector',
+  () =>
+  {
+    const input = 'button{&:hover{}}';
+    const tree = createTreeFromString(input);
+
+    expect(tree[0].children[0].selectors).toEqual(['&:hover']);
+  }
+);
+
 it('should parse a pseudo-element selector',
   () =>
   {
@@ -19,6 +29,16 @@ it('should parse a pseudo-element selector',
     const tree = createTreeFromString(input);
 
     expect(tree[0].selectors).toEqual(['button::before']);
+  }
+);
+
+it('should parse an attribute selector',
+  () =>
+  {
+    const input = 'button[type="submit"]{}';
+    const tree = createTreeFromString(input);
+
+    expect(tree[0].selectors).toEqual(['button[type="submit"]']);
   }
 );
 
@@ -69,5 +89,25 @@ it('should parse a nested `@media` selector',
     const tree = createTreeFromString(input);
 
     expect(tree[0].children[0].selectors).toEqual(['@media screen and (min-width: 576px)']);
+  }
+);
+
+it('should parse a selector with commas inside parentheses',
+  () =>
+  {
+    const input = 'div{&:in(a, b){}}';
+    const tree = createTreeFromString(input);
+
+    expect(tree[0].children[0].selectors).toEqual(['&:in(a, b)']);
+  }
+);
+
+it('should parse a selector with commas inside parentheses mixed with other selectors',
+  () =>
+  {
+    const input = 'div{& span, &:is(a, b), & h1{}}';
+    const tree = createTreeFromString(input);
+
+    expect(tree[0].children[0].selectors).toEqual(['& span', '&:is(a, b)', '& h1']);
   }
 );

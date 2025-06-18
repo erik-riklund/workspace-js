@@ -54,7 +54,9 @@ const renderBlock = (context, block, state, parent = '') =>
       throw new RenderingError('Nested color scheme media queries', block);
     }
 
+    console.log({ contextBefore: context });
     context = appendMediaQueryToContext(context, block.selectors[0]);
+    console.log({ contextAfter: context });
 
     if (!state.output[context])
     {
@@ -168,6 +170,8 @@ const contextContainsColorSchemeMediaQuery = (context) =>
  */
 const appendMediaQueryToContext = (context, mediaQuery) =>
 {
+  console.log({ context, mediaQuery });
+
   if (context.startsWith('@media '))
   {
     return `${context}and${mediaQuery.replace(/^@media\s+/, '')}`;
