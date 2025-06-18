@@ -45,6 +45,11 @@ export const makeMutableBlock = (block) =>
      */
     setSelectors: (newSelectors) =>
     {
+      if (newSelectors.some(selector => typeof selector !== 'string'))
+      {
+        throw new Error('Selectors must be strings');
+      }
+
       block.selectors = [...newSelectors];
     },
 
@@ -56,8 +61,9 @@ export const makeMutableBlock = (block) =>
      */
     setProperty: (key, value) =>
     {
-      const property = block.properties
-        .find(property => property.key === key);
+      const property = block.properties.find(
+        property => property.key === key
+      );
 
       if (property)
       {
@@ -76,19 +82,9 @@ export const makeMutableBlock = (block) =>
      */
     removeProperty: (key) =>
     {
-      block.properties = block.properties
-        .filter(property => property.key !== key);
-    },
-
-    /**
-     * Iterate over the block's raw properties. Being invoked from a plugin,
-     * it can be used to modify the block's properties using the `setProperty` method.
-     * 
-     * @param {CssEngine.RawPropertyHandler} callback
-     */
-    handleRawProperties: (callback) =>
-    {
-      block.rawProperties?.forEach(callback);
+      block.properties = block.properties.filter(
+        property => property.key !== key
+      );
     }
   }
 }

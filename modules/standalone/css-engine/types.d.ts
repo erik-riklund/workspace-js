@@ -32,22 +32,17 @@ declare global
       properties?: Property[],
 
       /**
-       * An optional array of raw (unparsed) property strings. These properties are
-       * exposed to transformation plugins to be parsed into valid key-value pairs.
-       */
-      rawProperties?: RawProperty[],
-
-      /**
        * An optional array of nested blocks, allowing for nested rules within the block.
        * This enables the creation of a hierarchical structure of CSS rules using nesting.
        */
       children?: AbstractTree,
 
       /**
-       * Metadata associated with the block, such as the line number in the input string
-       * where the block begins. Useful for error reporting or source mapping.
+       * Metadata associated with the block. Useful for error reporting or source mapping.
        */
-      metadata: { line: number }
+      metadata: {
+        start: { line: number, column: number }, end?: { line: number, column: number }
+      }
     }
 
     /**
@@ -86,18 +81,6 @@ declare global
      * Represents a single CSS property, consisting of a property name and its corresponding value.
      */
     type Property = { key: string, value: string };
-
-    /**
-     * Represents a raw, unparsed property string. These properties are transformed into valid
-     * key-value pairs by transformation plugins, making the language highly flexible and extensible.
-     */
-    type RawProperty = string;
-
-    /**
-     * A function type that handles the processing of a raw, unparsed properties. This handler is
-     * implemented by transformation plugins to convert `RawProperty` strings into `Property` objects.
-     */
-    type RawPropertyHandler = (property: RawProperty) => void;
 
     /**
      * Represents the internal state of the rendering process, containing the accumulated output.
