@@ -1,5 +1,5 @@
 import { it, expect } from 'bun:test'
-import { handleSelectors } from '../plugins/selectors'
+import { handleSelectors } from '..'
 
 // ----- handleAttributeSelector ---------------
 

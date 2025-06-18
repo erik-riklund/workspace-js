@@ -1,5 +1,5 @@
 import { it, expect } from 'bun:test'
-import { parseSelector } from '../plugins/selectors/helpers'
+import { parseSelector } from '../helpers'
 
 it('should parse a selector with a single label',
   () =>

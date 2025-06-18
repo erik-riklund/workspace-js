@@ -26,7 +26,7 @@ export const handleAttributeValueSelector = ({ name, keyword, value }) =>
 }
 
 /**
- * ?
+ * Handles the `base` selector.
  */
 export const handleBaseSelector = () => ':root';
 
@@ -49,7 +49,7 @@ export const handleContextSelector = ({ selector, relationship, type, name }) =>
 }
 
 /**
- * ?
+ * Handles `device *` selectors.
  * 
  * @param {Record<string, string>} input
  */
@@ -72,7 +72,7 @@ export const handleDeviceSelector = ({ device }) =>
 }
 
 /**
- * ?
+ * Handles `device * .. *` selectors.
  * 
  * @param {Record<string, string>} input
  */

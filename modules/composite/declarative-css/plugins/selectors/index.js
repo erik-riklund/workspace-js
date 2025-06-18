@@ -2,7 +2,7 @@ import * as s from './handlers'
 import { parseSelector } from './helpers'
 
 /**
- * ?
+ * Defines the mapping between selectors and handlers.
  * 
  * @type {Record<string, [(segments: Record<string, string>)=>string, string[]]>}
  */
@@ -93,7 +93,7 @@ export const selectorsPlugin =
 }
 
 /**
- * ?
+ * Transforms the given selectors into standard CSS.
  * 
  * @param {string[]} selectors
  * @return {string[]}
