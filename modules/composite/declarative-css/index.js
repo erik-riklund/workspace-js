@@ -1,7 +1,7 @@
 import { makeEngine } from 'module/css-engine'
 
 import { propertiesPlugin } from './plugins/properties'
-import { reusablesPlugin } from './plugins/reusables'
+import { createReusablesPlugin } from './plugins/reusables'
 import { selectorsPlugin } from './plugins/selectors'
 
 /**
@@ -11,14 +11,9 @@ import { selectorsPlugin } from './plugins/selectors'
  */
 export const createDeclarativeEngine = (plugins = []) =>
 {
+  const declarativeCssPlugins = [
+    ...createReusablesPlugin(), selectorsPlugin, propertiesPlugin
+  ];
+
   return makeEngine([...declarativeCssPlugins, ...plugins]);
 }
-
-/**
- * The default set of declarative CSS plugins.
- * 
- * @type {CssEngine.Plugin[]}
- */
-const declarativeCssPlugins = [
-  reusablesPlugin, selectorsPlugin, propertiesPlugin
-];

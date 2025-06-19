@@ -24,6 +24,11 @@ export const delimiters =
       metadata: { start: { line: state.currentLine, column: state.currentColumn } }
     };
 
+    if (block.selectors.length > 1 && block.selectors.some(s => s.startsWith('@')))
+    {
+      throw new ParsingError('At-rule mixed with other selectors', state);
+    }
+
     if (state.stack.length > 0)
     {
       const parent = state.stack[state.stack.length - 1];
@@ -144,11 +149,13 @@ export const delimiters =
    */
   handleComma: (state) => 
   {
-    if (state.isStringLiteral || state.currentParenthesisLevel > 0)
+    if (state.isStringLiteral ||
+      state.currentPropertyName ||
+      state.currentParenthesisLevel > 0)
     {
       state.buffer += ',';
 
-      return; // early exit > a string literal or inside parenthesis.
+      return; // early exit > string literal, property value, or inside parenthesis.
     }
 
     if (state.currentParenthesisLevel === 0)
