@@ -110,6 +110,7 @@ export const delimiters =
     currentBlock.properties.push(property);
 
     state.currentPropertyName = '';
+    state.isCustomProperty = false;
     state.buffer = '';
   },
 
@@ -131,7 +132,7 @@ export const delimiters =
       return; // early exit > a string literal or nested selector.
     }
 
-    if (state.currentPropertyName)
+    if (state.currentPropertyName && !state.isCustomProperty)
     {
       throw new ParsingError(
         'Unexpected colon (expected property value)', state
@@ -139,6 +140,8 @@ export const delimiters =
     }
 
     state.currentPropertyName = state.buffer.trim();
+    state.isCustomProperty = state.currentPropertyName.startsWith('!');
+
     state.buffer = '';
   },
 
@@ -158,7 +161,7 @@ export const delimiters =
       return; // early exit > string literal, property value, or inside parenthesis.
     }
 
-    if (state.currentParenthesisLevel === 0)
+    if (!state.isCustomProperty && state.currentParenthesisLevel === 0)
     {
       const selector = state.buffer.trim();
 
@@ -183,7 +186,7 @@ export const delimiters =
   {
     state.buffer += '&';
 
-    if (!state.isStringLiteral)
+    if (!state.isCustomProperty && !state.isStringLiteral)
     {
       state.isNestedSelector = true;
     }
@@ -197,7 +200,11 @@ export const delimiters =
   handleAtSign: (state) => 
   {
     state.buffer += '@';
-    state.isAtSign = true;
+
+    if (!state.isCustomProperty)
+    {
+      state.isAtSign = true;
+    }
   },
 
   /**
@@ -209,15 +216,18 @@ export const delimiters =
   {
     state.buffer += '"';
 
-    if (state.isStringLiteral)
+    if (!state.isCustomProperty)
     {
-      state.isStringLiteral = (
-        state.buffer[state.buffer.length - 2] === '\\'
-      );
-    }
-    else
-    {
-      state.isStringLiteral = true;
+      if (state.isStringLiteral)
+      {
+        state.isStringLiteral = (
+          state.buffer[state.buffer.length - 2] === '\\'
+        );
+      }
+      else
+      {
+        state.isStringLiteral = true;
+      }
     }
   },
 
@@ -230,7 +240,7 @@ export const delimiters =
   {
     state.buffer += '(';
 
-    if (!state.isStringLiteral)
+    if (!state.isCustomProperty && !state.isStringLiteral)
     {
       state.currentParenthesisLevel++;
     }
@@ -245,7 +255,7 @@ export const delimiters =
   {
     state.buffer += ')';
 
-    if (!state.isStringLiteral)
+    if (!state.isCustomProperty && !state.isStringLiteral)
     {
       state.currentParenthesisLevel--;
     }

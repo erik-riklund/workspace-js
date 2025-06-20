@@ -112,6 +112,11 @@ export const makeParserState = () =>
     isAtRule: false,
 
     /**
+     * Indicates whether a custom property is currently being parsed.
+     */
+    isCustomProperty: false,
+
+    /**
      * Indicates whether a nested selector is currently being parsed.
      */
     isNestedSelector: false,
