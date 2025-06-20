@@ -1,3 +1,6 @@
+import { handleProperty } from './helpers'
+import { handleCustomProperty } from './helpers'
+
 /**
  * ?
  * 
@@ -7,5 +10,20 @@ export const propertiesPlugin =
 {
   stage: 'input',
 
-  handler: (input) => input.replace(/(?<=\s|\{)set\s+(\w+(?:-\w+)*)\s+to\s+([^\n;]+)/gs, '$1:$2;')
+  handler: (input) => 
+  {
+    /**
+     * ?
+     */
+    input = handleProperty('set * to **', input);
+
+    /**
+     * ?
+     */
+    input = handleCustomProperty(
+      'include **', input, (groups) => `!include: ${groups}`
+    );
+
+    return input;
+  }
 }

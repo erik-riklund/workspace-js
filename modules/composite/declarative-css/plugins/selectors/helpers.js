@@ -16,22 +16,12 @@ const compiledPatterns = {};
  */
 export const parseSelector = (pattern, labels, selector) =>
 {
-  if (!(pattern in compiledPatterns))
-  {
-    compiledPatterns[pattern] = compileSelectorPattern(pattern);
-  }
-
-  const expression = compiledPatterns[pattern];
+  const expression = compileSelectorPattern(pattern);
   const matches = expression.exec(selector);
 
-  if (matches)
-  {
-    return Object.fromEntries(
-      labels.map((label, index) => [label, matches[index + 1]])
-    );
-  }
-
-  return null;
+  return !matches ? null : Object.fromEntries(
+    labels.map((label, index) => [label, matches[index + 1]])
+  );
 }
 
 /**
@@ -45,6 +35,11 @@ export const parseSelector = (pattern, labels, selector) =>
  */
 const compileSelectorPattern = (pattern) =>
 {
+  if (pattern in compiledPatterns)
+  {
+    return compiledPatterns[pattern];
+  }
+
   /**
    * Replaces `{groups}` with a regular expression that matches
    * any of the specified groups.
@@ -76,7 +71,9 @@ const compileSelectorPattern = (pattern) =>
     .replace(/\s\*\?/g, '(?:\\s`([\\w\\s-]+)`)?')
     .replace(/\*/g, '`([\\w\\s-]+)`');
 
-  return new RegExp(`^${compiledPattern}$`);
+  compiledPatterns[pattern] = new RegExp(`^${compiledPattern}$`);
+
+  return compiledPatterns[pattern];
 };
 
 /**
