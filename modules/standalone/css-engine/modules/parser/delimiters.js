@@ -1,13 +1,11 @@
 import { ParsingError } from '.'
 
 /**
- * ?
+ * Defines handlers for various CSS delimiter characters.
  */
 export const delimiters =
 {
   /**
-   * ?
-   * 
    * @param {CssEngine.ParserState} state
    */
   handleOpeningBrace: (state) =>
@@ -48,8 +46,6 @@ export const delimiters =
   },
 
   /**
-   * ?
-   * 
    * @param {CssEngine.ParserState} state
    */
   handleClosingBrace: (state) =>
@@ -69,8 +65,6 @@ export const delimiters =
   },
 
   /**
-   * ?
-   * 
    * @param {CssEngine.ParserState} state
    */
   handleSemicolon: (state) => 
@@ -115,8 +109,6 @@ export const delimiters =
   },
 
   /**
-   * ?
-   * 
    * @param {CssEngine.ParserState} state
    */
   handleColon: (state) => 
@@ -146,8 +138,6 @@ export const delimiters =
   },
 
   /**
-   * ?
-   * 
    * @param {CssEngine.ParserState} state
    */
   handleComma: (state) => 
@@ -178,8 +168,6 @@ export const delimiters =
   },
 
   /**
-   * ?
-   * 
    * @param {CssEngine.ParserState} state
    */
   handleAmpersand: (state) => 
@@ -193,8 +181,6 @@ export const delimiters =
   },
 
   /**
-   * ?
-   * 
    * @param {CssEngine.ParserState} state
    */
   handleAtSign: (state) => 
@@ -208,8 +194,6 @@ export const delimiters =
   },
 
   /**
-   * ?
-   * 
    * @param {CssEngine.ParserState} state
    */
   handleDoubleQuote: (state) => 
@@ -232,8 +216,6 @@ export const delimiters =
   },
 
   /**
-   * ?
-   * 
    * @param {CssEngine.ParserState} state
    */
   handleOpeningParenthesis: (state) => 
@@ -247,8 +229,6 @@ export const delimiters =
   },
 
   /**
-   * ?
-   * 
    * @param {CssEngine.ParserState} state
    */
   handleClosingParenthesis: (state) => 

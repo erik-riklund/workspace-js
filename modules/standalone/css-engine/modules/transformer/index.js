@@ -1,5 +1,5 @@
 /**
- * ?
+ * Transforms the abstract syntax tree by applying a series of plugins.
  * 
  * @param {CssEngine.AbstractTree} tree
  * @param {CssEngine.TransformPlugin[]} plugins
@@ -33,6 +33,8 @@ export const transformTree = (tree, plugins) =>
 }
 
 /**
+ * Creates a mutable representation of a CSS block for transformations.
+ * 
  * @param {CssEngine.Block} block
  */
 export const makeMutableBlock = (block) =>

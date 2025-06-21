@@ -1,7 +1,7 @@
 import { delimiters as d } from './delimiters'
 
 /**
- * ?
+ * Parses a CSS string and converts it into an abstract syntax tree.
  * 
  * @param {string} input
  * @returns {CssEngine.AbstractTree}
@@ -48,7 +48,7 @@ export const createTreeFromString = (input) =>
 }
 
 /**
- * ?
+ * Initializes and returns a new parser state object.
  */
 export const makeParserState = () =>
 {
@@ -129,13 +129,11 @@ export const makeParserState = () =>
 }
 
 /**
- * ?
+ * Represents an error that occurs during the parsing of a CSS string.
  */
 export class ParsingError extends Error
 {
   /**
-   * ?
-   * 
    * @param {string} message
    * @param {CssEngine.ParserState} state
    */

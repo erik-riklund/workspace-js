@@ -1,7 +1,7 @@
 import { renderBlock } from './block'
 
 /**
- * ?
+ * Renders an abstract syntax tree into a CSS string.
  * 
  * @param {CssEngine.AbstractTree} tree
  */
@@ -26,7 +26,7 @@ export const renderTreeToString = (tree) =>
 }
 
 /**
- * ?
+ * Represents an error that occurs during the rendering of the CSS tree.
  */
 export class RenderingError extends Error
 {

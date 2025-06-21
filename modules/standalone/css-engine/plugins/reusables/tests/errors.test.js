@@ -1,14 +1,14 @@
+import { makeEngine } from 'module/css-engine'
 import { it, expect, beforeEach } from 'bun:test'
-import { createDeclarativeEngine } from 'module/declarative-css'
 
 let engine;
 
-beforeEach(() => engine = createDeclarativeEngine());
+beforeEach(() => engine = makeEngine());
 
 it('should throw an error when encountering a reusable block with more than one selector',
   () =>
   {
-    const input = 'reusable `test`, div {}';
+    const input = 'reusable test, div {}';
 
     expect(() => engine(input)).toThrowError(
       'A reusable block cannot have more than one selector'
@@ -19,7 +19,7 @@ it('should throw an error when encountering a reusable block with more than one 
 it('should throw an error when encountering a reusable block with children',
   () =>
   {
-    const input = 'reusable `test` {span {}}';
+    const input = 'reusable test {span {}}';
 
     expect(() => engine(input)).toThrowError('A reusable block cannot have children');
   }

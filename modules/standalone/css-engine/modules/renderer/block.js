@@ -1,7 +1,7 @@
 import { RenderingError } from '.'
 
 /**
- * ?
+ * Renders a single CSS block and its children into the render state.
  * 
  * @param {CssEngine.RenderState} state
  * @param {CssEngine.Block} block
@@ -76,7 +76,7 @@ export const renderBlock = (state, block, context = 'root', parents = []) =>
 }
 
 /**
- * ?
+ * Renders a selector, potentially combining it with a parent selector.
  * 
  * @param {string} selector
  * @param {string} parent
@@ -87,7 +87,7 @@ const renderSelector = (selector, parent) =>
 }
 
 /**
- * ?
+ * Renders an array of CSS properties into a string.
  * 
  * @param {CssEngine.Property[]} properties
  */
@@ -97,7 +97,7 @@ const renderProperties = (properties) =>
 }
 
 /**
- * ?
+ * Renders the content of a CSS block (properties and children) into the render state.
  * 
  * @param {CssEngine.RenderState} state
  * @param {string} context
