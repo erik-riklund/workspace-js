@@ -2,6 +2,7 @@ import { makeEngine } from 'module/css-engine'
 
 import { propertiesPlugin } from './plugins/properties'
 import { selectorsPlugin } from './plugins/selectors'
+import { createReusablesPlugin } from 'module/css-engine/plugins/reusables'
 
 /**
  * Creates a new declarative CSS engine, adding the provided
@@ -11,7 +12,9 @@ import { selectorsPlugin } from './plugins/selectors'
  */
 export const createDeclarativeEngine = (plugins = []) =>
 {
-  const declarativeCssPlugins = [selectorsPlugin, propertiesPlugin];
+  const declarativeCssPlugins = [
+    ...createReusablesPlugin(), selectorsPlugin, propertiesPlugin
+  ];
 
   return makeEngine([...declarativeCssPlugins, ...plugins]);
 }
