@@ -2,8 +2,6 @@ import { createTreeFromString } from './modules/parser'
 import { transformTree } from './modules/transformer'
 import { renderTreeToString } from './modules/renderer'
 
-import { createReusablesPlugin } from './plugins/reusables'
-
 /**
  * Creates a new engine function that uses the provided plugins to perform
  * input, transform, and output operations on a provided input string.
@@ -13,10 +11,7 @@ import { createReusablesPlugin } from './plugins/reusables'
 export const makeEngine = (plugins = []) =>
 {
   const inputPlugins = plugins.filter((plugin) => plugin.stage === 'input');
-  const transformPlugins = [
-    ...createReusablesPlugin(),
-    ...plugins.filter((plugin) => plugin.stage === 'transform'),
-  ];
+  const transformPlugins = plugins.filter((plugin) => plugin.stage === 'transform');
   const outputPlugins = plugins.filter((plugin) => plugin.stage === 'output');
 
   /**
