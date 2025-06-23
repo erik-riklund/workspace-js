@@ -1,8 +1,8 @@
-import { makeEngine } from 'module/css-engine'
+import { makeEngine } from 'module/css-pipeline'
 
 import { propertiesPlugin } from './plugins/properties'
 import { selectorsPlugin } from './plugins/selectors'
-import { createReusablesPlugin } from 'module/css-engine/plugins/reusables'
+import { createReusablesPlugin } from 'module/css-pipeline/plugins/reusables'
 
 /**
  * Creates a new declarative CSS engine, adding the provided

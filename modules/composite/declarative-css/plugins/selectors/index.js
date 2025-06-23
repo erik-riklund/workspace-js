@@ -77,18 +77,9 @@ export const selectorsPlugin =
 
   handler: (block) =>
   {
-    try
-    {
-      const selectors = block.getSelectors();
+    const selectors = block.getSelectors();
 
-      block.setSelectors(handleSelectors(selectors));
-    }
-    catch (error)
-    {
-      throw new Error(
-        `${error.message} (line ${block.metadata.line})`
-      );
-    }
+    block.setSelectors(handleSelectors(selectors));
   }
 }
 
@@ -112,9 +103,9 @@ export const handleSelectors = (selectors) =>
 
       if (parsedSelector)
       {
+        done = true;
         result.push(handler(parsedSelector));
 
-        done = true;
         break; // move on to the next selector.
       }
     }
