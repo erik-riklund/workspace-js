@@ -1,8 +1,8 @@
 /**
  * Transforms the abstract syntax tree by applying a series of plugins.
  * 
- * @param {CssEngine.AbstractTree} tree
- * @param {CssEngine.TransformPlugin[]} plugins
+ * @param {CssPipeline.AbstractTree} tree
+ * @param {CssPipeline.TransformPlugin[]} plugins
  */
 export const transformTree = (tree, plugins) =>
 {
@@ -35,7 +35,7 @@ export const transformTree = (tree, plugins) =>
 /**
  * Creates a mutable representation of a CSS block for transformations.
  * 
- * @param {CssEngine.Block} block
+ * @param {CssPipeline.Block} block
  */
 export const makeMutableBlock = (block) =>
 {
@@ -79,13 +79,15 @@ export const makeMutableBlock = (block) =>
     },
 
     /**
-     * Return the property with the specified key, or `undefined` if it does not exist.
+     * Return the value associated with the specified key,
+     * or `undefined` if it does not exist.
      * 
      * @param {string} key
+     * @returns {string | undefined}
      */
     getProperty: (key) =>
     {
-      return block.properties.find(property => property.key === key);
+      return block.properties.find(property => property.key === key)?.value;
     },
 
     /**
@@ -93,7 +95,7 @@ export const makeMutableBlock = (block) =>
      */
     getProperties: () =>
     {
-      return [...block.properties];
+      return [...block.properties.map(property => ({ ...property }))];
     },
 
     /**
@@ -104,9 +106,8 @@ export const makeMutableBlock = (block) =>
      */
     setProperty: (key, value) =>
     {
-      const property = block.properties.find(
-        property => property.key === key
-      );
+      const property = block.properties
+        .find(property => property.key === key);
 
       if (property)
       {
@@ -125,9 +126,8 @@ export const makeMutableBlock = (block) =>
      */
     removeProperty: (key) =>
     {
-      block.properties = block.properties.filter(
-        property => property.key !== key
-      );
+      block.properties = block.properties
+        .filter(property => property.key !== key);
     }
   }
 }

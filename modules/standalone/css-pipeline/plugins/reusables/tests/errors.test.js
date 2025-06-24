@@ -1,9 +1,9 @@
 import { it, expect, beforeEach } from 'bun:test'
-import { makeEngine } from 'module/css-pipeline'
+import { makePipeline } from 'module/css-pipeline'
 import { createReusablesPlugin } from '..'
 
 let engine; beforeEach(
-  () => engine = makeEngine([...createReusablesPlugin()])
+  () => engine = makePipeline([...createReusablesPlugin()])
 );
 
 it('should throw an error when encountering a reusable block with more than one selector',

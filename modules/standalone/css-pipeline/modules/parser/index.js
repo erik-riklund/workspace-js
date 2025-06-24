@@ -4,7 +4,7 @@ import { delimiters as d } from './delimiters'
  * Parses a CSS string and converts it into an abstract syntax tree.
  * 
  * @param {string} input
- * @returns {CssEngine.AbstractTree}
+ * @returns {CssPipeline.AbstractTree}
  */
 export const createTreeFromString = (input) =>
 {
@@ -62,7 +62,7 @@ export const makeParserState = () =>
      * Holds the root of the abstract tree, which is an array of blocks.
      * Each block contains selectors, properties, and potentially nested blocks.
      * 
-     * @type {CssEngine.AbstractTree}
+     * @type {CssPipeline.AbstractTree}
      */
     tree: [],
 
@@ -70,7 +70,7 @@ export const makeParserState = () =>
      * Holds the stack of blocks that are currently being parsed.
      * The stack maintains the hierarchy of nested blocks.
      * 
-     * @type {CssEngine.Block[]}
+     * @type {CssPipeline.Block[]}
      */
     stack: [],
 
@@ -135,7 +135,7 @@ export class ParsingError extends Error
 {
   /**
    * @param {string} message
-   * @param {CssEngine.ParserState} state
+   * @param {CssPipeline.ParserState} state
    */
   constructor(message, state)
   {

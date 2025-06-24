@@ -3,8 +3,8 @@ import { RenderingError } from '.'
 /**
  * Renders a single CSS block and its children into the render state.
  * 
- * @param {CssEngine.RenderState} state
- * @param {CssEngine.Block} block
+ * @param {CssPipeline.RenderState} state
+ * @param {CssPipeline.Block} block
  * @param {string[]} parents
  */
 export const renderBlock = (state, block, context = 'root', parents = []) =>
@@ -89,7 +89,7 @@ const renderSelector = (selector, parent) =>
 /**
  * Renders an array of CSS properties into a string.
  * 
- * @param {CssEngine.Property[]} properties
+ * @param {CssPipeline.Property[]} properties
  */
 const renderProperties = (properties) =>
 {
@@ -99,10 +99,10 @@ const renderProperties = (properties) =>
 /**
  * Renders the content of a CSS block (properties and children) into the render state.
  * 
- * @param {CssEngine.RenderState} state
+ * @param {CssPipeline.RenderState} state
  * @param {string} context
  * @param {string[]} selectors
- * @param {CssEngine.Block} block
+ * @param {CssPipeline.Block} block
  */
 const renderBlockContent = (state, context, selectors, block) =>
 {

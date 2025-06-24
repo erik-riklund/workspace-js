@@ -13,10 +13,7 @@ export const makeFolderObject = (folderPath, fileSystem) =>
     /**
      * Returns the path to the folder as it was specified.
      */
-    get path ()
-    {
-      return folderPath;
-    },
+    get path () { return folderPath; },
 
     /**
      * Returns `true` if the folder exists, `false` otherwise.

@@ -6,7 +6,7 @@ declare global
   /**
    * Contains all the types used by the CSS engine and its plugins.
    */
-  namespace CssEngine
+  namespace CssPipeline
   {
     /**
      * Represents the root of the abstract syntax tree (AST) created by the parser.

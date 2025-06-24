@@ -3,16 +3,18 @@ import { transformTree } from './modules/transformer'
 import { renderTreeToString } from './modules/renderer'
 
 /**
- * Creates a new engine function that uses the provided plugins to perform
+ * Creates a new pipeline function that uses the provided plugins to perform
  * input, transform, and output operations on a provided input string.
  * 
- * @param {CssEngine.Plugin[]} plugins
+ * @param {CssPipeline.Plugin[]} plugins
  */
-export const makeEngine = (plugins = []) =>
+export const makePipeline = (plugins = []) =>
 {
-  const inputPlugins = plugins.filter((plugin) => plugin.stage === 'input');
-  const transformPlugins = plugins.filter((plugin) => plugin.stage === 'transform');
-  const outputPlugins = plugins.filter((plugin) => plugin.stage === 'output');
+  const [
+    inputPlugins,
+    transformPlugins,
+    outputPlugins
+  ] = groupPluginsByStage(plugins);
 
   /**
    * @param {string} input
@@ -51,4 +53,23 @@ export const makeEngine = (plugins = []) =>
 
     return output;
   }
+}
+
+/**
+ * Groups plugins into input, transform, and output stages.
+ * 
+ * @param {CssPipeline.Plugin[]} plugins
+ * @returns {[
+ *  CssPipeline.InputPlugin[],
+ *  CssPipeline.TransformPlugin[],
+ *  CssPipeline.OutputPlugin[]
+ * ]}
+ */
+const groupPluginsByStage = (plugins) =>
+{
+  return [
+    plugins.filter((plugin) => plugin.stage === 'input'),
+    plugins.filter((plugin) => plugin.stage === 'transform'),
+    plugins.filter((plugin) => plugin.stage === 'output'),
+  ]
 }

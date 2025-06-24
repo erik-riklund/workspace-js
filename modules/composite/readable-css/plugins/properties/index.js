@@ -4,7 +4,7 @@ import { handleCustomProperty } from './helpers'
 /**
  * An input plugin that processes custom property syntaxes.
  * 
- * @type {CssEngine.InputPlugin}
+ * @type {CssPipeline.InputPlugin}
  */
 export const propertiesPlugin =
 {

@@ -1,4 +1,4 @@
-import { makeEngine } from 'module/css-pipeline'
+import { makePipeline } from 'module/css-pipeline'
 
 import { propertiesPlugin } from './plugins/properties'
 import { selectorsPlugin } from './plugins/selectors'
@@ -8,7 +8,7 @@ import { createReusablesPlugin } from 'module/css-pipeline/plugins/reusables'
  * Creates a new declarative CSS engine, adding the provided
  * plugins to its transformation pipeline.
  * 
- * @param {CssEngine.Plugin[]} plugins
+ * @param {CssPipeline.Plugin[]} plugins
  */
 export const createDeclarativeEngine = (plugins = []) =>
 {
@@ -16,5 +16,5 @@ export const createDeclarativeEngine = (plugins = []) =>
     ...createReusablesPlugin(), selectorsPlugin, propertiesPlugin
   ];
 
-  return makeEngine([...declarativeCssPlugins, ...plugins]);
+  return makePipeline([...declarativeCssPlugins, ...plugins]);
 }

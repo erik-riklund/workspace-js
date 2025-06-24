@@ -11,10 +11,7 @@ export const makeFileObject = (filePath, fileSystem) =>
     /**
      * Returns the path to the file as it was specified.
      */
-    get path ()
-    {
-      return filePath;
-    },
+    get path () { return filePath; },
 
     /**
      * Returns the name of the file (including the extension).

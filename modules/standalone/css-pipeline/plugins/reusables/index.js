@@ -1,15 +1,15 @@
 /**
- * Creates a set of CSS engine plugins that extracts and stores reusable blocks,
- * and expands `!include` directives with the properties from the stored reusable blocks.
+ * Creates a set of CSS pipeline plugins that extracts and stores reusable blocks,
+ * and expands `!include` directives with the properties from the defined reusable blocks.
  * 
- * @returns {CssEngine.TransformPlugin[]}
+ * @returns {CssPipeline.TransformPlugin[]}
  */
 export const createReusablesPlugin = (prefix = 'reusable', separator = ',') =>
 {
   /**
    * Stores reusable blocks, mapped by their defined name.
    * 
-   * @type {Record<string, CssEngine.Property[]>}
+   * @type {Record<string, CssPipeline.Property[]>}
    */
   const reusableBlocks = {};
 
@@ -59,7 +59,7 @@ export const createReusablesPlugin = (prefix = 'reusable', separator = ',') =>
       {
         if (block.hasProperty('!include'))
         {
-          const includes = block.getProperty('!include').value;
+          const includes = block.getProperty('!include');
           const reusableBlockList = includes.split(separator);
 
           for (const blockName of reusableBlockList)

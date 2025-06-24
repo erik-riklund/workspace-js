@@ -1,7 +1,7 @@
 /**
  * ?
  * 
- * @returns {CssEngine.InputPlugin}
+ * @returns {CssPipeline.InputPlugin}
  */
 export const createVariablesPlugin = () =>
 {

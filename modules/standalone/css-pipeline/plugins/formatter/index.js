@@ -1,7 +1,7 @@
 /**
  * ?
  * 
- * @type {CssEngine.OutputPlugin}
+ * @type {CssPipeline.OutputPlugin}
  */
 export const readableFormatPlugin =
 {

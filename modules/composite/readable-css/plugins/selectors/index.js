@@ -69,7 +69,7 @@ const selectorMap =
 /**
  * A plugin that transforms declarative CSS selectors into standard CSS.
  * 
- * @type {CssEngine.TransformPlugin}
+ * @type {CssPipeline.TransformPlugin}
  */
 export const selectorsPlugin =
 {

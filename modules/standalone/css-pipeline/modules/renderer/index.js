@@ -3,11 +3,11 @@ import { renderBlock } from './block'
 /**
  * Renders an abstract syntax tree into a CSS string.
  * 
- * @param {CssEngine.AbstractTree} tree
+ * @param {CssPipeline.AbstractTree} tree
  */
 export const renderTreeToString = (tree) => 
 {
-  /** @type {CssEngine.RenderState} */
+  /** @type {CssPipeline.RenderState} */
   const state = { output: {} };
 
   for (const block of tree)
@@ -32,7 +32,7 @@ export class RenderingError extends Error
 {
   /**
    * @param {string} message
-   * @param {CssEngine.Block} block
+   * @param {CssPipeline.Block} block
    */
   constructor(message, block)
   {

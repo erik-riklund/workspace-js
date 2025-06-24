@@ -6,7 +6,7 @@ import { ParsingError } from '.'
 export const delimiters =
 {
   /**
-   * @param {CssEngine.ParserState} state
+   * @param {CssPipeline.ParserState} state
    */
   handleOpeningBrace: (state) =>
   {
@@ -46,7 +46,7 @@ export const delimiters =
   },
 
   /**
-   * @param {CssEngine.ParserState} state
+   * @param {CssPipeline.ParserState} state
    */
   handleClosingBrace: (state) =>
   {
@@ -65,7 +65,7 @@ export const delimiters =
   },
 
   /**
-   * @param {CssEngine.ParserState} state
+   * @param {CssPipeline.ParserState} state
    */
   handleSemicolon: (state) => 
   {
@@ -109,7 +109,7 @@ export const delimiters =
   },
 
   /**
-   * @param {CssEngine.ParserState} state
+   * @param {CssPipeline.ParserState} state
    */
   handleColon: (state) => 
   {
@@ -138,7 +138,7 @@ export const delimiters =
   },
 
   /**
-   * @param {CssEngine.ParserState} state
+   * @param {CssPipeline.ParserState} state
    */
   handleComma: (state) => 
   {
@@ -168,7 +168,7 @@ export const delimiters =
   },
 
   /**
-   * @param {CssEngine.ParserState} state
+   * @param {CssPipeline.ParserState} state
    */
   handleAmpersand: (state) => 
   {
@@ -181,7 +181,7 @@ export const delimiters =
   },
 
   /**
-   * @param {CssEngine.ParserState} state
+   * @param {CssPipeline.ParserState} state
    */
   handleAtSign: (state) => 
   {
@@ -194,7 +194,7 @@ export const delimiters =
   },
 
   /**
-   * @param {CssEngine.ParserState} state
+   * @param {CssPipeline.ParserState} state
    */
   handleDoubleQuote: (state) => 
   {
@@ -216,7 +216,7 @@ export const delimiters =
   },
 
   /**
-   * @param {CssEngine.ParserState} state
+   * @param {CssPipeline.ParserState} state
    */
   handleOpeningParenthesis: (state) => 
   {
@@ -229,7 +229,7 @@ export const delimiters =
   },
 
   /**
-   * @param {CssEngine.ParserState} state
+   * @param {CssPipeline.ParserState} state
    */
   handleClosingParenthesis: (state) => 
   {
