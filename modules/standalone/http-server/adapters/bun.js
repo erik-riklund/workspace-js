@@ -61,7 +61,7 @@ export const makeHttpServerAdapter = () =>
  * @param {Request} request
  * @returns {HttpServer.RequestContext}
  */
-export const makeHttpServerRequestContext = (request) =>
+export const makeHttpRequestContext = (request) =>
 {
   return {
     request,
@@ -109,7 +109,7 @@ const createRoutePipelines = (routes, middlewares) =>
     /** @param {Request} request */
     pipelines[path][method] = async (request) =>
     {
-      const context = makeHttpServerRequestContext(request);
+      const context = makeHttpRequestContext(request);
 
       for (const middleware of middlewareStack)
       {
